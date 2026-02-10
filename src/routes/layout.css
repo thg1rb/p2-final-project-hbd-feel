@@ -1,2 +1,14 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
+
+@theme {
+  --color-primary: #02a96b;
+}
+
+@layer base {
+  /* src/routes/layout.css */
+  :root, body {
+    font-family: 'Noto Sans Thai', sans-serif;
+  }
+}
+

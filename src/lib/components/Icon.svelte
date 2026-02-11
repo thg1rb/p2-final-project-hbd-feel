@@ -29,7 +29,11 @@
 		loading: '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>',
 		X: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
 		userCheck:
-			'<path d="m16 11 2 2 4-4"/><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>'
+			'<path d="m16 11 2 2 4-4"/><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',
+		check: '<path d="M20 6 9 17l-5-5"/>',
+		circle: '<circle cx="12" cy="12" r="10"/>',
+		comment:
+			'<path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>',
 	};
 </script>
 

@@ -1,6 +1,7 @@
 <script>
 	import Icon from '$lib/components/Icon.svelte';
 	import NavBar from '$lib/components/NavBar.svelte';
+	import RequestTable from './RequestTable.svelte';
 </script>
 
 <div class="flex flex-col gap-7 p-10">
@@ -11,6 +12,15 @@
 		</p>
 	</div>
 	<div class="flex gap-4">
+		<div class="flex flex-1 items-center justify-between rounded-xl bg-white p-5 shadow-sm">
+			<div class="flex flex-col gap-2">
+				<p>คำขอทั้งหมด</p>
+				<p class="text-2xl font-bold">15</p>
+			</div>
+			<div class="rounded-xl bg-blue-500 p-3">
+				<Icon name="book" class="stroke-white"></Icon>
+			</div>
+		</div>
 		<div class="flex flex-1 items-center justify-between rounded-xl bg-white p-5 shadow-sm">
 			<div class="flex flex-col gap-2">
 				<p>นิสิตที่รอการอนุมัติ</p>
@@ -39,13 +49,5 @@
 			</div>
 		</div>
 	</div>
-	<table class="w-full">
-		<thead class="divide-y border-b bg-gray-100">
-			<tr class="divide-x">
-				<th class=" p-4 text-start">ชื่อนิสิต</th>
-				<th class="  p-4 text-start">ประเภทรางวัล</th>
-			</tr>
-		</thead>
-		<tbody class="divide-y"> </tbody>
-	</table>
+	<RequestTable />
 </div>

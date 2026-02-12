@@ -1,13 +1,12 @@
 <script>
 	import { page } from '$app/stores';
 	import Icon from '$lib/components/Icon.svelte';
+	import Application from './Application.svelte';
 	import ApproveSection from './ApproveSection.svelte';
-	import Award from './Award.svelte';
 	import CommentSection from './CommentSection.svelte';
 	import InfoCard from './InfoCard.svelte';
 	import NisitInfo from './NisitInfo.svelte';
 	import Progression from './Progression.svelte';
-	import Qualification from './Qualification.svelte';
 
 	$: id = $page.params.id;
 </script>
@@ -29,8 +28,7 @@
 	<div class=" mt-7 flex gap-6">
 		<div class="flex flex-2 flex-col gap-6">
 			<NisitInfo />
-			<Qualification />
-			<Award />
+			<Application />
 			<CommentSection />
 		</div>
 		<div class="flex flex-1 flex-col gap-6">

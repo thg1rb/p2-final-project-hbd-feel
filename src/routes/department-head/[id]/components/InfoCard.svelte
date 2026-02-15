@@ -15,7 +15,7 @@
 			class=" flex w-fit items-center justify-center rounded-full border border-blue-500 bg-blue-50 px-2 py-1 text-sm text-blue-500"
 		>
 			<Icon name="badge" />
-			<p>ด้านวิชาการ</p>
+			<p>{value}</p>
 		</div>
 	{/if}
 </div>

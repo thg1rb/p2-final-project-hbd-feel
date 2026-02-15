@@ -1,7 +1,11 @@
-<script>
+<script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
-	import NavBar from '$lib/components/NavBar.svelte';
+	import type { Application } from '$lib/type';
+	import type { PageData } from './$types';
 	import RequestTable from './RequestTable.svelte';
+
+	export let data: PageData;
+	const applications: Application[] = data.applications as Application[];
 </script>
 
 <div class="flex flex-col gap-7 p-10">
@@ -49,5 +53,5 @@
 			</div>
 		</div>
 	</div>
-	<RequestTable />
+	<RequestTable {applications} />
 </div>

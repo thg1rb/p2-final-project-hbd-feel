@@ -20,13 +20,13 @@
 			<button
 				class="button-effect flex flex-1 items-center justify-center gap-3 rounded-xl bg-primary p-3 text-white"
 			>
-				<Icon name="check" />
+				<Icon name="check" class="stroke-white" />
 				<p>เห็นชอบ</p>
 			</button>
 			<button
 				class="button-effect flex flex-1 items-center justify-center gap-3 rounded-xl bg-red-500 p-3 text-white"
 			>
-				<Icon name="X" />
+				<Icon name="X" class="stroke-white" />
 				<p>ไม่เห็นชอบ</p>
 			</button>
 		</div>

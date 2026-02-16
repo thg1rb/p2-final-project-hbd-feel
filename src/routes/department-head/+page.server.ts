@@ -12,12 +12,29 @@ export const load: PageServerLoad = async ({ url }) => {
       params: { search, status, page }
     })
 
+    const [pendingResponse, approvedResponse, rejectedResponse] = await Promise.all([
+      apiClient.get('/applications/count', { params: { status: 'SUBMITTED' } }),
+      apiClient.get('/applications/count', { params: { status: 'APPROVED_DEPT_HEAD' } }),
+      apiClient.get('/applications/count', { params: { status: 'REJECTED_DEPT_HEAD' } })
+    ])
+
+    const pendingCount = pendingResponse.data as number || 0
+    const approvedCount = approvedResponse.data as number || 0
+    const rejectedCount = rejectedResponse.data as number || 0
+    const totalCount = pendingCount + approvedCount + rejectedCount
+
     return {
       applications: response.data.data as Application[],
       search,
       status,
       currentPage: response.data.current_page || page,
-      totalPages: response.data.last_page || 1
+      totalPages: response.data.last_page || 1,
+      stats: {
+        total: totalCount,
+        pending: pendingCount,
+        approved: approvedCount,
+        rejected: rejectedCount
+      }
     }
   } catch (error: any) {
     console.error('--- LOG START ---');
@@ -34,6 +51,12 @@ export const load: PageServerLoad = async ({ url }) => {
       status,
       currentPage: 1,
       totalPages: 1,
+      stats: {
+        total: 0,
+        pending: 0,
+        approved: 0,
+        rejected: 0
+      },
       error: error.message
     };
   }

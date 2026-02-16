@@ -2,11 +2,22 @@ import { apiClient } from "$lib/api";
 import type { Application } from "$lib/type";
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ url }) => {
+  const search = url.searchParams.get('search') || '';
+  const status = url.searchParams.get('status') || '';
+  const page = parseInt(url.searchParams.get('page') || '1');
+
   try {
-    const response = await apiClient.get('/applications')
+    const response = await apiClient.get('/applications', {
+      params: { search, status, page }
+    })
+
     return {
-      applications: response.data.data as Application[]
+      applications: response.data.data as Application[],
+      search,
+      status,
+      currentPage: response.data.current_page || page,
+      totalPages: response.data.last_page || 1
     }
   } catch (error: any) {
     console.error('--- LOG START ---');
@@ -19,7 +30,11 @@ export const load: PageServerLoad = async () => {
 
     return {
       applications: [],
-      error: error.message // ส่ง error message จริงไปแสดงที่หน้าจอด้วย
+      search,
+      status,
+      currentPage: 1,
+      totalPages: 1,
+      error: error.message
     };
   }
 }

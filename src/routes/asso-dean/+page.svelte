@@ -1,17 +1,14 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
-	import type { Application } from '$lib/type';
-	import type { PageData } from './$types';
-	import RequestTable from './RequestTable.svelte';
-
-	let { data }: { data: PageData } = $props();
+	import NavBar from '$lib/components/NavBar.svelte';
+	import RequestTable from '../department-head/RequestTable.svelte';
 </script>
 
 <div class="flex flex-col gap-7 p-10">
 	<div class="flex flex-col gap-2">
-		<p class="text-2xl font-bold">แดชบอร์ดเจ้าหน้าที่คณะ</p>
+		<p class="text-2xl font-bold">แดชบอร์ดรองคณบดี</p>
 		<p class=" text-gray-400">
-			จัดการรายละเอียดนิสิตดีเด่นในภาควิชา, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ
+			จัดการรายละเอียดนิสิตดีเด่นภายในคณะ, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ
 		</p>
 	</div>
 	<div class="flex gap-4">
@@ -52,11 +49,5 @@
 			</div>
 		</div>
 	</div>
-	<RequestTable
-		applications={data.applications as Application[]}
-		searchQuery={data.search || ''}
-		statusFilter={data.status || ''}
-		currentPage={data.currentPage || 1}
-		totalPages={data.totalPages || 1}
-	/>
+	<RequestTable />
 </div>

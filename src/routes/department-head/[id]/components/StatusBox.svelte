@@ -1,20 +1,54 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
 	import { ApprovalStatus } from '$lib/enums';
-	export let status: ApprovalStatus;
-	export let role: string;
-	export let name: string = '';
-	export let time: string = '';
-	export let agree: boolean = false;
-	export let reason: string = '';
-	export let last: boolean = false;
 
-	$: borderColor =
-		status === ApprovalStatus.NOT_STARTED
-			? 'border-gray-200'
-			: status === ApprovalStatus.PENDING
-				? 'border-amber-500'
-				: 'border-primary';
+	interface Props {
+		status: ApprovalStatus;
+		role: string;
+		name?: string;
+		time?: string;
+		agree?: boolean;
+		reason?: string;
+		last?: boolean;
+	}
+
+	let {
+		status,
+		role,
+		name = '',
+		time = '',
+		agree = false,
+		reason = '',
+		last = false
+	}: Props = $props();
+	// export let name: string = '';
+	// export let time: string = '';
+	// export let agree: boolean = false;
+	// export let reason: string = '';
+	// export let last: boolean = false;
+
+	let borderColor = $derived.by(() => {
+		if (status === ApprovalStatus.NOT_STARTED) {
+			return 'border-gray-200';
+		} else if (status === ApprovalStatus.PENDING) {
+			return 'border-amber-500';
+		} else if (status === ApprovalStatus.APPROVED) {
+			return 'border-primary';
+		} else if (status === ApprovalStatus.REJECT) {
+			return 'border-red-400';
+		}
+	});
+	let bgColor = $derived.by(() => {
+		if (status === ApprovalStatus.NOT_STARTED) {
+			return 'bg-gray-200';
+		} else if (status === ApprovalStatus.PENDING) {
+			return 'bg-amber-500';
+		} else if (status === ApprovalStatus.APPROVED) {
+			return 'bg-primary';
+		} else if (status === ApprovalStatus.REJECT) {
+			return 'bg-red-400';
+		}
+	});
 </script>
 
 <div class="flex h-fit gap-4">
@@ -25,6 +59,8 @@
 					<Icon name="circle" class="fil-gray-200 stroke-0" size={10} />
 				{:else if status === ApprovalStatus.PENDING}
 					<Icon name="loading" class="stroke-amber-500" size={10} />
+				{:else if status === ApprovalStatus.REJECT}
+					<Icon name="X" class="stroke-red-400" size={10} />
 				{:else}
 					<Icon name="check" class="stroke-primary" size={10} />
 				{/if}
@@ -33,7 +69,7 @@
 		{#if last}
 			<div></div>
 		{:else}
-			<div class="h-full w-0.5 bg-gray-300"></div>
+			<div class="h-full w-0.5 {bgColor}"></div>
 		{/if}
 	</div>
 	<div class="flex flex-col gap-1 pb-10">
@@ -46,7 +82,7 @@
 			<p class="text-sm text-gray-400">{name} - {time}</p>
 			<div class="rounded-xl bg-gray-100 p-3">
 				{#if agree}
-					<p class="text-sm text-gray-700">เห็นชอบ มีคุณสมบัติเหมาะสม</p>
+					<p class="text-sm text-gray-700">{reason}</p>
 				{:else}
 					<p class="text-sm text-red-400">ไม่เห็นชอบ: {reason || 'ไม่ระบุเหตุผล'}</p>
 				{/if}

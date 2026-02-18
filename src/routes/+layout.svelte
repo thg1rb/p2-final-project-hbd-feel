@@ -2,6 +2,7 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import NavBar from '$lib/components/NavBar.svelte';
+	import ToastContainer from '$lib/components/ToastContainer.svelte';
 
 	let { children } = $props();
 </script>
@@ -17,4 +18,5 @@
 </svelte:head>
 
 <NavBar />
+<ToastContainer />
 {@render children()}

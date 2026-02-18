@@ -30,18 +30,18 @@
 	});
 </script>
 
-<div class="flex flex-col gap-4 rounded-xl border border-gray-300 bg-white p-7 shadow-sm">
+<div class="flex flex-1 flex-col gap-4 rounded-xl border border-gray-300 bg-white p-7 shadow-sm">
 	<div class="flex gap-3 font-bold">
 		<Icon name="trophy" class="stroke-primary" />
 		<p>แบบเสนอรายชื่อนิสิตดีเด่น</p>
 	</div>
 
-	<div class="mt-5 flex flex-col gap-5 text-sm">
+	<div class="mt-5 flex h-full flex-col gap-5 text-sm min-h-200">
 		{#if previewUrl}
 			<iframe
 				src={previewUrl}
 				title="PDF Preview"
-				class="h-200 w-full rounded-lg border border-gray-100"
+				class="h-full w-full rounded-lg border border-gray-100"
 				frameborder="0"
 			></iframe>
 		{:else}

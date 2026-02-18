@@ -1,15 +1,40 @@
 export enum ApprovalStatus {
   APPROVED = 'APPROVED',
   PENDING = 'PENDING',
-  NOT_STARTED = 'NOT_STARTED'
+  NOT_STARTED = 'NOT_STARTED',
+  REJECT = "REJECT"
 }
 
 export enum ApprovalRole {
   HEAD_OF_DEPT = 'หัวหน้าภาควิชา',
-  VICE_DEAN = 'รองคณบดี',
+  ASSO_DEAN = 'รองคณบดี',
   DEAN = 'คณบดี',
-  STUDENT_AFFAIRS = 'กองพัฒนานิสิต',
-  COMMITTEE = 'คณะกรรมการ',
-  COMMITTEE_CHAIR = 'ประธานคณะกรรมการ',
-  PRESIDENT_PROPOSAL = 'เสนออธิการบดี'
+  NISIT_DEV = 'กองพัฒนานิสิต',
+  BOARD = 'คณะกรรมการ',
+  BOARD_HEAD = 'ประธานคณะกรรมการ',
+  CHANCELLOR = 'อธิการบดี'
 }
+
+export enum ApplicationStatus {
+  SUBMITTED = 'SUBMITTED',
+  APPROVED_DEPT_HEAD = 'APPROVED_DEPT_HEAD',
+  REJECTED_DEPT_HEAD = 'REJECTED_DEPT_HEAD',
+  APPROVED_ASSO_DEAN = 'APPROVED_ASSO_DEAN',
+  REJECTED_ASSO_DEAN = 'REJECTED_ASSO_DEAN',
+  APPROVED_DEAN = 'APPROVED_DEAN',
+  REJECTED_DEAN = 'REJECTED_DEAN',
+  APPROVED_NISIT_DEV = 'APPROVED_NISIT_DEV',
+  REJECTED_NISIT_DEV = 'REJECTED_NISIT_DEV',
+  APPROVED_BOARD = 'APPROVED_BOARD',
+  REJECTED_BOARD = 'REJECTED_BOARD',
+}
+
+export const roleMap: Record<string, ApprovalRole> = {
+  'DEPT_HEAD': ApprovalRole.HEAD_OF_DEPT,
+  'ASSO_DEAN': ApprovalRole.ASSO_DEAN,
+  'DEAN': ApprovalRole.DEAN,
+  'NISIT_DEV': ApprovalRole.NISIT_DEV,
+  'BOARD': ApprovalRole.BOARD,
+  'BOARD_HEAD': ApprovalRole.BOARD_HEAD,
+  'CHANCELLOR': ApprovalRole.CHANCELLOR
+} 

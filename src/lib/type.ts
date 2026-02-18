@@ -1,3 +1,5 @@
+import type { ApplicationStatus, ApprovalRole } from "./enums"
+
 export interface Application {
   award: Award,
   award_id: string,
@@ -7,7 +9,7 @@ export interface Application {
   event_id: string,
   id: string,
   path: string,
-  status: string,
+  status: ApplicationStatus,
   student_id: string,
   updated_at: string,
   user: User,
@@ -77,4 +79,22 @@ export interface Requirement {
   key: string,
   label: string,
   required: boolean
+}
+
+export interface Approval {
+  id: string,
+  user_id: number,
+  application_id: string,
+  reason: string,
+  status: string,
+  created_at: string,
+  updated_at: string,
+  user: ApprovalUser
+}
+
+export interface ApprovalUser {
+  id: number,
+  firstName: string,
+  lastName: string,
+  role: ApprovalRole,
 }

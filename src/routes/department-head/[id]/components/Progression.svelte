@@ -1,7 +1,70 @@
-<script>
+<script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
-	import { ApprovalRole, ApprovalStatus } from '$lib/enums';
+	import { ApprovalRole, ApprovalStatus, roleMap } from '$lib/enums';
+	import type { Approval } from '$lib/type';
+	import { formatThaiDate } from '$lib/utils/dateFormatter';
 	import StatusBox from './StatusBox.svelte';
+
+	interface Props {
+		approvals: Approval[];
+	}
+
+	const { approvals }: Props = $props();
+
+	const workflowOrder = [
+		ApprovalRole.HEAD_OF_DEPT,
+		ApprovalRole.ASSO_DEAN,
+		ApprovalRole.DEAN,
+		ApprovalRole.NISIT_DEV,
+		ApprovalRole.BOARD,
+		ApprovalRole.BOARD_HEAD,
+		ApprovalRole.CHANCELLOR
+	];
+
+	const getApprovalData = (role: ApprovalRole): Approval | null => {
+		const approval = approvals.find((a) => roleMap[a.user.role] === role);
+		if (approval === undefined) {
+			return null;
+		}
+		return approval;
+	};
+
+	const displayWorkflows = $derived.by(() => {
+		let hasRejected = false;
+
+		return workflowOrder.map((role, i) => {
+			const approval = getApprovalData(role);
+			const isLast = i === workflowOrder.length - 1;
+
+			if (hasRejected) {
+				return { role, status: ApprovalStatus.NOT_STARTED, isLast };
+			}
+
+			if (approval !== null) {
+				const isApproved = approval.status === 'APPROVED';
+
+				if (!isApproved) hasRejected = true;
+
+				return {
+					role,
+					status: isApproved ? ApprovalStatus.APPROVED : ApprovalStatus.REJECT,
+					isLast,
+					props: {
+						agree: isApproved,
+						name: `${approval.user.firstName} ${approval.user.lastName}`,
+						time: formatThaiDate(approval.created_at),
+						reason: approval.reason
+					}
+				};
+			}
+
+			return {
+				role,
+				status: i === approvals.length ? ApprovalStatus.PENDING : ApprovalStatus.NOT_STARTED,
+				isLast
+			};
+		});
+	});
 </script>
 
 <div class="flex flex-1 flex-col gap-6 rounded-xl border border-gray-300 bg-white p-5 shadow-sm">
@@ -10,23 +73,8 @@
 		<p>สถานะการพิจารณา</p>
 	</div>
 	<div class="flex flex-col">
-		<StatusBox
-			status={ApprovalStatus.APPROVED}
-			role={ApprovalRole.HEAD_OF_DEPT}
-			agree={true}
-			name={'ผศ.ดร.วิชัย รักเรียน'}
-			time={'16 ธันวาคม 2568'}
-			reason={'มีคุณสมบัติเหมาะสม'}
-		/>
-		<StatusBox status={ApprovalStatus.PENDING} role={ApprovalRole.VICE_DEAN} />
-		<StatusBox status={ApprovalStatus.NOT_STARTED} role={ApprovalRole.DEAN} />
-		<StatusBox status={ApprovalStatus.NOT_STARTED} role={ApprovalRole.STUDENT_AFFAIRS} />
-		<StatusBox status={ApprovalStatus.NOT_STARTED} role={ApprovalRole.COMMITTEE} />
-		<StatusBox status={ApprovalStatus.NOT_STARTED} role={ApprovalRole.COMMITTEE_CHAIR} />
-		<StatusBox
-			status={ApprovalStatus.NOT_STARTED}
-			role={ApprovalRole.PRESIDENT_PROPOSAL}
-			last={true}
-		/>
+		{#each displayWorkflows as item}
+			<StatusBox status={item.status} role={item.role} last={item.isLast} {...item.props} />
+		{/each}
 	</div>
 </div>

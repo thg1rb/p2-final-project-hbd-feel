@@ -7,11 +7,11 @@
 	import ApplicationComponent from './components/Application.svelte';
 	import { formatThaiDate } from '$lib/utils/dateFormatter';
 	import { ApplicationStatus } from '$lib/enums.js';
+	import DocumentSection from './components/DocumentSection.svelte';
 	let { data, form } = $props();
 
 	const application = $derived(data.application);
 	const approvals = $derived(data.approvals);
-	const filePath = $derived(data.filePath);
 	const headDeptApproval = $derived(data.headDeptApproval);
 
 	const status: string = $derived.by(() => {
@@ -56,19 +56,13 @@
 	<div class=" mt-7 flex gap-6">
 		<div class="flex flex-2 flex-col gap-6">
 			<NisitInfo {application} />
-			<ApplicationComponent {filePath} />
-			{#if application.status !== ApplicationStatus.SUBMITTED}
-				<CommentSection {headDeptApproval} />
-			{:else}
-				<div></div>
-			{/if}
+			<ApplicationComponent {application} />
+			<DocumentSection {application} />
 		</div>
-		<div
-			class={`flex flex-1 flex-col ${application.status !== ApplicationStatus.SUBMITTED ? '' : 'gap-6'}`}
-		>
+		<div class={`flex flex-1 flex-col gap-6`}>
 			<Progression {approvals} />
 			{#if application.status !== ApplicationStatus.SUBMITTED}
-				<div></div>
+				<CommentSection {headDeptApproval} />
 			{:else}
 				<ApproveSection {form} />
 			{/if}

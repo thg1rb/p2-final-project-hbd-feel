@@ -16,7 +16,6 @@ export const load = async ({ params }) => {
 
   return {
     application: application,
-    filePath: application.path,
     approvals: approvals,
     headDeptApproval: headDeptApproval
   };

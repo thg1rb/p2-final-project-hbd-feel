@@ -4,7 +4,9 @@ export interface Application {
   award: Award,
   award_id: string,
   created_at: string,
-  documents: Object,
+  documents: {
+    [key: string]: { file_path: string },
+  },
   event: Event,
   event_id: string,
   id: string,
@@ -76,8 +78,8 @@ export interface Award {
 }
 
 export interface Requirement {
-  key: string,
-  label: string,
+  id: string,
+  name: string,
   required: boolean
 }
 

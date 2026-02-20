@@ -11,23 +11,21 @@
     $: currentPath = $page.url.pathname;
 
     function getCurrentStep() {
-        if (currentPath.includes("step-1")) return 1;
-        if (currentPath.includes("step-2")) return 2;
-        if (currentPath.includes("step-3")) return 3;
+        if (currentPath.includes("step1")) return 1;
+        if (currentPath.includes("step2")) return 2;
+        if (currentPath.includes("step3")) return 3;
         return 1;
     }
 
     $: step = getCurrentStep();
 
     function goDashboard() {
-        goto("/application"); // เปลี่ยน path ตาม route dashboard จริงของคุณ
+        goto("/application");
     }
 </script>
 
 <div class="max-w-5xl mx-auto px-6 pt-12 pb-8">
     <div class="bg-white rounded-xl shadow border border-gray-100 p-8">
-
-        <!-- ✅ Back Button -->
         <button
             on:click={goDashboard}
             class="text-sm text-gray-500 hover:text-gray-700 flex items-center mb-6"
@@ -42,8 +40,6 @@
             </svg>
             กลับไปแดชบอร์ด
         </button>
-
-        <!-- Header -->
         <div class="mb-8">
             <h1 class="text-2xl font-bold text-gray-900">
                 สมัครนิสิตดีเด่น
@@ -52,8 +48,6 @@
                 ภาคเรียนที่ 2/2567
             </p>
         </div>
-
-        <!-- Step Indicator -->
         <div class="flex items-center gap-6 mb-10">
             {#each steps as item, index}
                 <div class="flex items-center gap-3">
@@ -85,8 +79,6 @@
         </div>
 
         <hr class="mb-8" />
-
-        <!-- Content ของแต่ละ step -->
         <slot />
     </div>
 </div>

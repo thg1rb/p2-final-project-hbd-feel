@@ -6,13 +6,15 @@
 	import Progression from './components/Progression.svelte';
 	import ApplicationComponent from './components/Application.svelte';
 	import { formatThaiDate } from '$lib/utils/dateFormatter';
-	import { ApplicationStatus } from '$lib/enums.js';
+	import { ApprovalStatus, RoleLevel } from '$lib/enums.js';
 	import DocumentSection from './components/DocumentSection.svelte';
 	let { data, form } = $props();
 
 	const application = $derived(data.application);
 	const approvals = $derived(data.approvals);
 	const headDeptApproval = $derived(data.headDeptApproval);
+	const currentLevel = RoleLevel.DEPT_HEAD;
+	const previousLevel = currentLevel-1;
 
 	const status: string = $derived.by(() => {
 		if (application === undefined) return '';
@@ -48,23 +50,19 @@
 		<div class="flex flex-col gap-2">
 			<div class="flex items-center justify-start gap-3">
 				<p class="text-2xl font-bold">{application?.id}</p>
-				{#if application?.status === ApplicationStatus.SUBMITTED}
-					<div class=" rounded-full border border-amber-400 bg-amber-100 px-3 py-1 text-amber-400">
-						รอพิจารณา
-					</div>
-				{:else if role !== 'DEPT_HEAD'}
-					<div class=" rounded-full border border-primary bg-amber-100 px-3 py-1 text-primary">
-						อนุมติ
-					</div>
-				{:else if role === 'DEPT_HEAD' && status === 'APPROVED'}
-					<div class=" rounded-full border border-primary bg-primary/10 px-3 py-1 text-primary">
-						อนุมติ
-					</div>
-				{:else if role === 'DEPT_HEAD' && status === 'REJECTED'}
+				{#if application.status === ApprovalStatus.APPROVED && application.level === previousLevel}
+				<div class=" rounded-full border border-amber-400 bg-amber-100 px-3 py-1 text-amber-400">
+					รอพิจารณา
+				</div>
+				{:else if application.status === ApprovalStatus.REJECTED && application.level === currentLevel}
 					<div class=" rounded-full border border-red-400 bg-red-100 px-3 py-1 text-red-400">
 						ปฏิเสธ
 					</div>
-				{/if}
+				{:else}
+				<div class=" rounded-full border border-primary bg-amber-100 px-3 py-1 text-primary">
+					อนุมติ
+				</div>
+			{/if}
 			</div>
 			<p class=" text-gray-400">ยื่นเมื่อ {formatThaiDate(application?.created_at)}</p>
 		</div>
@@ -76,7 +74,7 @@
 			</div>
 			<div class={`flex flex-1 flex-col gap-6`}>
 				<Progression {approvals} />
-				{#if application?.status !== ApplicationStatus.SUBMITTED}
+				{#if application.level !== previousLevel}
 					<CommentSection {headDeptApproval} />
 				{:else}
 					<ApproveSection {form} />

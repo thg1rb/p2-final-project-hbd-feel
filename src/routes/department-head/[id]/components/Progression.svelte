@@ -67,7 +67,7 @@
 	});
 </script>
 
-<div class="flex flex-1 flex-col gap-6 rounded-xl border border-gray-300 bg-white p-5 shadow-sm">
+<div class="flex flex-1 flex-col gap-6 max-h-fit rounded-xl border border-gray-300 bg-white p-5 shadow-sm">
 	<div class="flex gap-3 font-bold">
 		<Icon name="user" class="stroke-primary" />
 		<p>สถานะการพิจารณา</p>

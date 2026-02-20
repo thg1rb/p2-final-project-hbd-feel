@@ -2,7 +2,7 @@ export enum ApprovalStatus {
   APPROVED = 'APPROVED',
   PENDING = 'PENDING',
   NOT_STARTED = 'NOT_STARTED',
-  REJECT = "REJECT"
+  REJECTED = "REJECTED"
 }
 
 export enum ApprovalRole {
@@ -29,6 +29,16 @@ export enum ApplicationStatus {
   REJECTED_BOARD = 'REJECTED_BOARD',
 }
 
+export enum RoleLevel {
+  NISIT = 0,
+  DEPT_HEAD = 1,
+  ASSO_DEAN = 2,
+  DEAN = 3,
+  NISIT_DEV = 4,
+  BOARD = 5,
+  BOARD_HEAD = 6,
+}
+
 export const roleMap: Record<string, ApprovalRole> = {
   'DEPT_HEAD': ApprovalRole.HEAD_OF_DEPT,
   'ASSO_DEAN': ApprovalRole.ASSO_DEAN,
@@ -37,4 +47,4 @@ export const roleMap: Record<string, ApprovalRole> = {
   'BOARD': ApprovalRole.BOARD,
   'BOARD_HEAD': ApprovalRole.BOARD_HEAD,
   'CHANCELLOR': ApprovalRole.CHANCELLOR
-} 
+}

@@ -1,24 +1,30 @@
 import { apiClient } from '$lib/api.js';
+import { toastStack } from '$lib/stores/toast.svelte.js';
 import type { Application, Approval } from '$lib/type.js';
 import type { Actions } from './$types.js';
 
 export const load = async ({ params }) => {
   const id = params.id
-  const appResponse = await apiClient.get(`/application/${id}`)
-  const approvalResponse = await apiClient.get(`/approvals/${id}`)
+  try {
+    const appResponse = await apiClient.get(`/application/${id}`)
+    const approvalResponse = await apiClient.get(`/approvals/${id}`)
 
-  const headDeptApprovalResponse = await apiClient.get(`/approvals/${id}/${2}`)
+    const headDeptApprovalResponse = await apiClient.get(`/approvals/${id}/${2}`)
 
-  const headDeptApproval = headDeptApprovalResponse.data as Approval
-  const approvals = approvalResponse.data as Approval[]
-  const application = appResponse.data as Application
+    const headDeptApproval = headDeptApprovalResponse.data as Approval
+    const approvals = approvalResponse.data as Approval[]
+    const application = appResponse.data as Application
 
 
-  return {
-    application: application,
-    approvals: approvals,
-    headDeptApproval: headDeptApproval
-  };
+    return {
+      application: application,
+      approvals: approvals,
+      headDeptApproval: headDeptApproval
+    };
+  } catch (err: any) {
+    toastStack.add('เกิดข้อผิดพลาด', 'error');
+  }
+
 };
 
 export const actions: Actions = {

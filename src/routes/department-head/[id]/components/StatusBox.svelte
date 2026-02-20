@@ -21,11 +21,6 @@
 		reason = '',
 		last = false
 	}: Props = $props();
-	// export let name: string = '';
-	// export let time: string = '';
-	// export let agree: boolean = false;
-	// export let reason: string = '';
-	// export let last: boolean = false;
 
 	let borderColor = $derived.by(() => {
 		if (status === ApprovalStatus.NOT_STARTED) {

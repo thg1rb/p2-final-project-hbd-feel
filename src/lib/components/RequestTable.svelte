@@ -6,13 +6,19 @@
 
 	interface Props {
 		applications: Application[];
+		currentLevel: number;
+		statusOptions: {
+			pending: string
+		  approved: string
+			rejected: string
+		}
 		searchQuery?: string
 		statusFilter?: string
 		currentPage?: number
 		totalPages?: number
 	}
 
-	let { applications, searchQuery = '', statusFilter = '', currentPage = 1, totalPages = 1 }: Props = $props();
+	let { applications, currentLevel, statusOptions, searchQuery = '', statusFilter = '', currentPage = 1, totalPages = 1 }: Props = $props();
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
@@ -33,7 +39,7 @@
 
 		goto(newUrl, {
 		  keepFocus: true,
-		  replaceState: true,
+		  replaceState: true
 		});
 	}
 
@@ -45,7 +51,8 @@
 
 		goto(`?${params.toString()}`, {
 			keepFocus: true,
-			noScroll: true
+			noScroll: true,
+	    replaceState: true
 		});
 	}
 </script>
@@ -62,9 +69,9 @@
               value={statusFilter}
               class="px-10 py-1.5 border-slate-300 focus:border-primary focus:ring-primary font-semibold text-[18px] rounded-md cursor-pointer">
               <option value="">ทั้งหมด</option>
-              <option value="SUBMITTED">รอพิจารณา</option>
-              <option value="APPROVED_DEPT_HEAD">อนุมัติ</option>
-              <option value="REJECTED_DEPT_HEAD">ปฏิเสธ</option>
+              <option value={statusOptions.pending}>รอพิจารณา</option>
+              <option value={statusOptions.approved}>อนุมัติ</option>
+              <option value={statusOptions.rejected}>ปฏิเสธ</option>
           </select>
       </div>
       <button type="submit"
@@ -93,17 +100,17 @@
   					<td class=" p-4">{app.user.department.name}</td>
   					<td class=" p-4">{app.award.name}</td>
   					<td class=" p-4">
-   						{#if app.status === 'SUBMITTED'}
-                <div class="w-fit rounded-full border border-amber-400 bg-amber-50 px-3 py-1 text-sm text-amber-400">
-                  รอพิจารณา
+              {#if app.level === currentLevel && app.status === "REJECTED"}
+                <div class="w-fit rounded-full border border-red-400 bg-red-50 px-3 py-1 text-sm text-red-400">
+                  ปฏิเสธ
                 </div>
-              {:else if app.status === 'APPROVED_DEPT_HEAD'}
+              {:else if app.level >= currentLevel}
                 <div class="w-fit rounded-full border border-emerald-400 bg-emerald-50 px-3 py-1 text-sm text-emerald-400">
                   อนุมัติ
                 </div>
-              {:else if app.status === 'REJECTED_DEPT_HEAD'}
-                <div class="w-fit rounded-full border border-red-400 bg-red-50 px-3 py-1 text-sm text-red-400">
-                  ปฏิเสธ
+              {:else}
+                <div class="w-fit rounded-full border border-yellow-400 bg-yellow-50 px-3 py-1 text-sm text-yellow-400">
+                  รอพิจารณา
                 </div>
               {/if}
   					</td>

@@ -4,16 +4,13 @@
 
     const steps = [
         { id: 1, label: "เลือกประเภท", path: "/application/step-1" },
-        { id: 2, label: "กรอกข้อมูล", path: "/application/step-2" },
-        { id: 3, label: "ยืนยัน", path: "/application/step-3" }
+        { id: 2, label: "กรอกข้อมูล", path: "/application/step-2" }
     ];
 
     $: currentPath = $page.url.pathname;
 
     function getCurrentStep() {
-        if (currentPath.includes("step1")) return 1;
         if (currentPath.includes("step2")) return 2;
-        if (currentPath.includes("step3")) return 3;
         return 1;
     }
 

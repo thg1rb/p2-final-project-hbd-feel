@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { awards, type Award } from "$lib/data/awardApplication";
-
+	import { enhance } from '$app/forms';
 	let award: Award | null = null;
-	let selectedFiles: File[] = [];
+	let selectedFile: File | null = null;
 	let requirementFiles: Record<string, File | null> = {};
+	let errors: Record<string, string> = {};
+	let isSubmitting = false;
 
 	onMount(() => {
 		const params = new URLSearchParams(window.location.search);
@@ -21,33 +23,76 @@
 
 	function handleMainFileChange(event: Event) {
 		const input = event.target as HTMLInputElement;
-		if (input.files) {
-			selectedFiles = Array.from(input.files);
+
+		if (input.files && input.files[0]) {
+			const file = input.files[0];
+
+			const maxSize = 10 * 1024 * 1024;
+
+			if (file.type !== "application/pdf") {
+				errors["main"] = "อนุญาตเฉพาะไฟล์ PDF เท่านั้น";
+				selectedFile = null;
+				return;
+			}
+
+			if (file.size > maxSize) {
+				errors["main"] = "ขนาดไฟล์ต้องไม่เกิน 10MB";
+				selectedFile = null;
+				return;
+			}
+
+			errors["main"] = "";
+			selectedFile = file;
 		}
 	}
 
 	function handleRequirementFileChange(event: Event, reqId: string) {
 		const input = event.target as HTMLInputElement;
+
 		if (input.files && input.files[0]) {
-			requirementFiles[reqId] = input.files[0];
+			const file = input.files[0];
+			const maxSize = 10 * 1024 * 1024;
+
+			if (file.type !== "application/pdf") {
+				errors[reqId] = "อนุญาตเฉพาะไฟล์ PDF เท่านั้น";
+				requirementFiles[reqId] = null;
+				return;
+			}
+
+			if (file.size > maxSize) {
+				errors[reqId] = "ขนาดไฟล์ต้องไม่เกิน 10MB";
+				requirementFiles[reqId] = null;
+				return;
+			}
+
+			errors[reqId] = "";
+			requirementFiles[reqId] = file;
 		}
 	}
+	function handleSubmit() {
+		isSubmitting = true;
 
-	function goToStep3() {
-		const params = new URLSearchParams(window.location.search);
-		const awardId = params.get("award_id");
-
-		window.location.href = `/award-application/step3?award_id=${awardId}`;
+		return async ({ update }) => {
+			await update();
+			isSubmitting = false;
+		};
 	}
 </script>
 
-<form method="POST" enctype="multipart/form-data">
+<form
+	method="POST"
+	enctype="multipart/form-data"
+	use:enhance={handleSubmit}
+>
+	<input type="hidden" name="award_id" value={award?.id} />
+	<input type="hidden" name="event_id" value="2" />
+	<input type="hidden" name="year" value="2025" />
+	<input type="hidden" name="grade" value="3.58" />
 	<div class="space-y-8">
 
-		<!-- Upload หลัก -->
 		<div>
 			<p class="block text-sm font-medium text-gray-700 mb-2">
-				อัปโหลดไฟล์สมัคร
+				อัปโหลดไฟล์สมัคร <span class="text-red-500">*</span>
 			</p>
 
 			<label
@@ -64,25 +109,29 @@
 				</p>
 
 				<p class="text-xs text-gray-500">
-					รองรับ PDF, รูปภาพ, Word (สูงสุด 10MB ต่อไฟล์)
+					รองรับเฉพาะไฟล์ PDF (สูงสุด 10MB ต่อไฟล์)
 				</p>
 
 				<input
 					id="documents"
 					type="file"
-					name="documents[]"
-					multiple
+					name="path"
+					accept="application/pdf"
 					class="hidden"
+					required
 					on:change={handleMainFileChange}
 				/>
 			</label>
 
-			{#if selectedFiles.length}
-				<ul class="mt-3 text-sm text-gray-600 space-y-1">
-					{#each selectedFiles as file}
-						<li>{file.name}</li>
-					{/each}
-				</ul>
+			{#if selectedFile}
+				<p class="text-sm text-emerald-600 mt-2">
+					{selectedFile.name}
+				</p>
+			{/if}
+			{#if errors["main"]}
+				<p class="text-sm text-red-500 mt-2">
+					{errors["main"]}
+				</p>
 			{/if}
 		</div>
 
@@ -115,14 +164,14 @@
 					</p>
 
 					<p class="text-xs text-gray-500">
-						รองรับ PDF, รูปภาพ, Word (สูงสุด 10MB ต่อไฟล์)
+						รองรับเฉพาะไฟล์ PDF (สูงสุด 10MB ต่อไฟล์)
 					</p>
 
 					<input
 						id={"requirement_" + req.id}
 						type="file"
-						name={"requirement_" + req.id}
-						required={req.required}
+						name={"documents[" + req.id + "]"}
+						accept="application/pdf"
 						class="hidden"
 						on:change={(e) => handleRequirementFileChange(e, req.id)}
 					/>
@@ -130,7 +179,12 @@
 
 				{#if requirementFiles[req.id]}
 					<p class="text-sm text-emerald-600 mt-2">
-						✓ เลือกไฟล์แล้ว: {requirementFiles[req.id]?.name}
+						{requirementFiles[req.id]?.name}
+					</p>
+				{/if}
+				{#if errors[req.id]}
+					<p class="text-sm text-red-500 mt-2">
+						{errors[req.id]}
 					</p>
 				{/if}
 			</div>
@@ -140,7 +194,6 @@
 
 	</div>
 
-	<!-- Buttons -->
 	<div class="mt-10 flex justify-between">
 		<a
 			href="/award-application/step1"
@@ -151,12 +204,11 @@
 
 		<button
 			type="submit"
-            on:click={goToStep3}
-			name="action"
-			value="next"
-			class="px-6 py-2 bg-emerald-600 text-white rounded-lg"
+			disabled={isSubmitting}
+			class="px-6 py-2 bg-emerald-600 text-white rounded-lg
+			disabled:bg-emerald-300 disabled:cursor-not-allowed"
 		>
-			ถัดไป &gt;
+			{isSubmitting ? 'กำลังส่ง...' : 'ส่งใบสมัคร'}
 		</button>
 	</div>
 </form>

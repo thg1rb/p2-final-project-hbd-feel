@@ -69,8 +69,27 @@
 			requirementFiles[reqId] = file;
 		}
 	}
-	function handleSubmit() {
+	function handleSubmit({ cancel }) {
 		isSubmitting = true;
+		errors = {};
+
+		if (!selectedFile) {
+			errors["main"] = "กรุณาอัปโหลดไฟล์ อัปโหลดไฟล์สมัคร";
+		}
+
+		if (award) {
+			award.requirements.forEach((req) => {
+				if (req.required && !requirementFiles[req.id]) {
+					errors[req.id] = `กรุณาอัปโหลดไฟล์ ${req.name}`;
+				}
+			});
+		}
+
+		if (Object.keys(errors).length > 0) {
+			isSubmitting = false;
+			cancel(); // 🚨 หยุดการ submit ทันที
+			return;
+		}
 
 		return async ({ update }) => {
 			await update();
@@ -118,7 +137,6 @@
 					name="path"
 					accept="application/pdf"
 					class="hidden"
-					required
 					on:change={handleMainFileChange}
 				/>
 			</label>
@@ -206,7 +224,10 @@
 			type="submit"
 			disabled={isSubmitting}
 			class="px-6 py-2 bg-emerald-600 text-white rounded-lg
-			disabled:bg-emerald-300 disabled:cursor-not-allowed"
+			cursor-pointer
+			hover:bg-emerald-700
+			disabled:bg-emerald-300
+			disabled:cursor-not-allowed"
 		>
 			{isSubmitting ? 'กำลังส่ง...' : 'ส่งใบสมัคร'}
 		</button>

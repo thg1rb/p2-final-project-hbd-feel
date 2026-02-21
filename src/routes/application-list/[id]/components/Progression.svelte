@@ -12,10 +12,10 @@
 	const { approvals }: Props = $props();
 
 	const workflowOrder = [
-		ApprovalRole.HEAD_OF_DEPT,
+		ApprovalRole.DEPT_HEAD,
 		ApprovalRole.ASSO_DEAN,
 		ApprovalRole.DEAN,
-		ApprovalRole.NISIT_DEV,
+		ApprovalRole.ADMIN,
 		ApprovalRole.BOARD,
 		ApprovalRole.BOARD_HEAD,
 		ApprovalRole.CHANCELLOR

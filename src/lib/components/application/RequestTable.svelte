@@ -117,7 +117,7 @@
   					<td class=" p-4">{formatThaiDate(app.created_at)}</td>
   					<td class=" p-4">
   						<a
-  							href={`/department-head/${app.id}`}
+  							href={`/application-list/${app.id}`}
   							class="button-effect flex w-fit items-center justify-center gap-2 rounded-xl border border-gray-300 p-2"
   						>
   							<Icon name="eye" size={25} />

@@ -25,7 +25,7 @@
 	/>
 	<RequestTable
   	applications={data.applications as Application[]}
-    currentLevel={2}
+    currentLevel={3}
    	statusOptions={statusOptions}
   	searchQuery={data.search || ''}
   	statusFilter={data.status || ''}

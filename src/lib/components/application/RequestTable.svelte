@@ -62,7 +62,7 @@
       <div class="flex-1 flex flex-row gap-x-2.5">
           <div class="relative flex-2">
               <Icon name="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></Icon>
-              <input name="search" value={searchQuery} placeholder="ค้นหารอบการให้รางวัลจากปีการศึกษา"
+              <input name="search" value={searchQuery} placeholder="ค้นหาจากรหัสใบสมัคร ชื่อจริง หรือรหัสนิสิต"
                   class="w-full border-gray-300 focus:border-primary focus:ring-primary rounded-md pl-10 placeholder:font-light placeholder:text-slate-400">
           </div>
           <select name="status"
@@ -117,7 +117,7 @@
   					<td class=" p-4">{formatThaiDate(app.created_at)}</td>
   					<td class=" p-4">
   						<a
-  							href={`/department-head/${app.id}`}
+  							href={`/application-list/${app.id}`}
   							class="button-effect flex w-fit items-center justify-center gap-2 rounded-xl border border-gray-300 p-2"
   						>
   							<Icon name="eye" size={25} />

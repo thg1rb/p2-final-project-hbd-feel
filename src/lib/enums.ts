@@ -6,10 +6,10 @@ export enum ApprovalStatus {
 }
 
 export enum ApprovalRole {
-  HEAD_OF_DEPT = 'หัวหน้าภาควิชา',
+  DEPT_HEAD = 'หัวหน้าภาควิชา',
   ASSO_DEAN = 'รองคณบดี',
   DEAN = 'คณบดี',
-  NISIT_DEV = 'กองพัฒนานิสิต',
+  ADMIN = 'กองพัฒนานิสิต',
   BOARD = 'คณะกรรมการ',
   BOARD_HEAD = 'ประธานคณะกรรมการ',
   CHANCELLOR = 'อธิการบดี'
@@ -40,10 +40,10 @@ export enum RoleLevel {
 }
 
 export const roleMap: Record<string, ApprovalRole> = {
-  'DEPT_HEAD': ApprovalRole.HEAD_OF_DEPT,
+  'DEPT_HEAD': ApprovalRole.DEPT_HEAD,
   'ASSO_DEAN': ApprovalRole.ASSO_DEAN,
   'DEAN': ApprovalRole.DEAN,
-  'NISIT_DEV': ApprovalRole.NISIT_DEV,
+  'ADMIN': ApprovalRole.ADMIN,
   'BOARD': ApprovalRole.BOARD,
   'BOARD_HEAD': ApprovalRole.BOARD_HEAD,
   'CHANCELLOR': ApprovalRole.CHANCELLOR

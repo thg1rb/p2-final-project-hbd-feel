@@ -11,6 +11,8 @@
 	let requirementFiles = $state<Record<string, File | null>>({});
 	let errors = $state<Record<string, string>>({});
 	let isSubmitting = $state(false);
+	let year = $state('');
+	let grade = $state('');
 
 	$effect(() => {
 		if (requirements.length > 0) {
@@ -92,7 +94,13 @@
 			cancel();
 			return;
 		}
+		if (!year) {
+			errors = { ...errors, year: 'กรุณากรอกปีการศึกษา' };
+		}
 
+		if (!grade) {
+			errors = { ...errors, grade: 'กรุณากรอกเกรดเฉลี่ย' };
+		}
 		return async ({ update }) => {
 			await update();
 			isSubmitting = false;
@@ -102,9 +110,54 @@
 
 <form method="POST" enctype="multipart/form-data" use:enhance={handleSubmit}>
 	<input type="hidden" name="award_id" value={award?.id} />
-	<input type="hidden" name="year" value="2025" />
-	<input type="hidden" name="grade" value="3.58" />
 
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+	<!-- ปีการศึกษา -->
+	<div>
+		<label class="block text-sm font-medium text-gray-700 mb-2">
+			ชั้นปีที่กำลังศึกษา <span class="text-red-500">*</span>
+		</label>
+
+		<input
+			type="number"
+			name="year"
+			min="1"
+			max="12"
+			bind:value={year}
+			placeholder="เช่น 1"
+			class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+		/>
+
+		{#if errors.year}
+			<p class="text-sm text-red-500 mt-2">
+				{errors.year}
+			</p>
+		{/if}
+	</div>
+
+	<div>
+		<label class="block text-sm font-medium text-gray-700 mb-2">
+			เกรดเฉลี่ยสะสม <span class="text-red-500">*</span>
+		</label>
+
+		<input
+			type="number"
+			step="0.01"
+			min="0"
+			max="4"
+			name="grade"
+			bind:value={grade}
+			placeholder="เช่น 3.58"
+			class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+		/>
+
+		{#if errors.grade}
+			<p class="text-sm text-red-500 mt-2">
+				{errors.grade}
+			</p>
+		{/if}
+	</div>
+</div>
 	<div class="space-y-8">
 		<div>
 			<p class="block text-sm font-medium text-gray-700 mb-2">

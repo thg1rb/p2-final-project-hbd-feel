@@ -78,34 +78,37 @@
                         {#each regs as reg}           
                         <script>
                             let Rstatus: string = reg.status;
-                        </script>             
-                            <div 
-                                class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow group cursor-pointer">
-                                <div class="flex items-center gap-5">
-                                    <div class="bg-gray-50 p-4 rounded-xl group-hover:bg-emerald-50 transition-colors">
-                                        <Icon name={availableStatus[reg.status].icon} currentColor="green" size=28/>
+                        </script>      
+                        
+                            <a href="/application-list/{reg.application_id}">
+                                <div 
+                                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow group cursor-pointer">
+                                    <div class="flex items-center gap-5">
+                                        <div class="bg-gray-50 p-4 rounded-xl group-hover:bg-emerald-50 transition-colors">
+                                            <Icon name={availableStatus[reg.status].icon} currentColor="green" size=28/>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 text-lg">
+                                                { 'รางวัลนิสิตดีเด่น' }
+                                                <span class="text-sm font-normal text-gray-500">
+                                            ({ reg.award_name })
+                                            <!-- ({ reg.awardable_type === 'activity' ? 'ด้านกิจกรรมเสริมหลักสูตร' : (reg.awardable_ype === 'innovation' ? 'ด้านความคิดสร้างสรรค์และนวัตกรรม' : 'ด้านความประพฤติดี') }) -->
+                                        </span>
+                                            </h4>
+                                            <p class="text-gray-400 text-sm">
+                                                { reg.academic_year } • สมัครเมื่อ { formatThaiDate(reg.created_at) ?? "XXXX" }
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h4 class="font-bold text-gray-800 text-lg">
-                                            { 'รางวัลนิสิตดีเด่น' }
-                                            <span class="text-sm font-normal text-gray-500">
-                                        ({ reg.award_name })
-                                        <!-- ({ reg.awardable_type === 'activity' ? 'ด้านกิจกรรมเสริมหลักสูตร' : (reg.awardable_ype === 'innovation' ? 'ด้านความคิดสร้างสรรค์และนวัตกรรม' : 'ด้านความประพฤติดี') }) -->
-                                    </span>
-                                        </h4>
-                                        <p class="text-gray-400 text-sm">
-                                            { reg.academic_year } • สมัครเมื่อ { formatThaiDate(reg.created_at) ?? "XXXX" }
-                                        </p>
+                                    <div class="flex items-center gap-4">
+                                        <span class="{ availableStatus[reg.status].bg } text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
+                                            <Icon name={availableStatus[reg.status].icon} currentColor="white" size="14" />
+                                            { availableStatus[reg.status].text }
+                                        </span>
+                                        <Icon name="arrow-right" class="text-gray-800" />
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-4">
-                                    <span class="{ availableStatus[reg.status].bg } text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
-                                        <Icon name={availableStatus[reg.status].icon} currentColor="white" size="14" />
-                                        { availableStatus[reg.status].text }
-                                    </span>
-                                    <Icon name="arrow-right" class="text-gray-800" />
-                                </div>
-                            </div>
+                            </a>       
                         {/each}
                     {/if}
                     <!-- @empty -->

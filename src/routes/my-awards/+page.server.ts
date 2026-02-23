@@ -2,7 +2,7 @@ import { apiClient } from "$lib/api";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({  }) => {
-    let id = '9802667580';
+    let id = '7358895205';
     try {
         const response = await apiClient.get(`/application/student/${id}`)
 

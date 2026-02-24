@@ -3,7 +3,7 @@
     export let title
     // export let icon
     export let textColor = "#000000"
-    export let amount = "0"
+    export let amount = 0
     export let icon = ""
     export let iconPrimary = "#ffffff"
     export let iconSecondary = "#ffffff"
@@ -17,7 +17,7 @@
         </div>
         <div class="flex justify-center items-center">
             <div class="size-14 flex justify-center items-center p-2 rounded-2xl" style="background-color: {iconSecondary};">
-                <Icon name={icon} size=36 currentColor={iconPrimary}></Icon>
+                <Icon name={icon} size={36} currentColor={iconPrimary}></Icon>
             </div>
         </div>
     </div>

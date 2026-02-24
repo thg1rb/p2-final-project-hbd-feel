@@ -1,9 +1,9 @@
 import { apiClient } from '$lib/api.js';
 import { toastStack } from '$lib/stores/toast.svelte.js';
 import type { Application, Approval } from '$lib/type.js';
-import type { Actions } from './$types.js';
+import type { Actions, PageServerLoad } from './$types.js';
 
-export const load = async ({ params }) => {
+export const load: PageServerLoad = async ({ params }) => {
   const id = params.id
   try {
     const appResponse = await apiClient.get(`/application/${id}`)

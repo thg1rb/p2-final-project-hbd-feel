@@ -3,12 +3,20 @@
 	import Icon from "$lib/components/Icon.svelte";
 	import { formatThaiDate } from "$lib/utils/dateFormatter";
     import type { PageProps } from "./$types";
-    const { data }: PageProps = $props()
+    const { data }: PageProps = $props();
+
+    interface AvailableStatus {
+        [key: string]: {
+            bg: string;
+            text: string;
+            icon: string;
+        }
+    };
 
     const { regs, stats, curr, student } = data;
 
-    let availableStatus = {
-        ['APPROVED']: {
+    let availableStatus : AvailableStatus = {
+        APPROVED: {
             bg: "bg-emerald-600",
             text: "เสร็จสมบูรณ์",
             icon: "book"
@@ -31,22 +39,22 @@
             <div class="flex justify-between">
                 <p class="text-3xl font-bold">สวัสดี, {student.firstName} {student.lastName}</p>
                 <div class="flex bg-[#226e64] text-md text-white items-center justify-center p-2 px-5 rounded-2xl gap-2">
-                    <Icon name="plus" currentColor="white" size=24/> สมัครนิสิตดีเด่น
+                    <Icon name="plus" currentColor="white" size={24}/> สมัครนิสิตดีเด่น
                 </div>
             </div>
             <p class="text-sm text-gray-600">รหัสนิสิต: {student.student_id} | คณะ{student.faculty.name} | ภาควิชา{student.department.name}</p>
         </div>
         <div class="w-2/3 flex flex-wrap gap-8 justify-evenly">
-            <CountBox title="การสมัครทั้งหมด" amount={stats.all} iconPrimary="#059669" iconSecondary="#ecfdf5" icon="book"/>
-            <CountBox title="รอพิจารณา" amount={stats.pending} iconPrimary="#f97316" iconSecondary="#fff7ed" icon="eye"/>
-            <CountBox title="อนุมัติแล้ว" amount={stats.approved} textColor="#226e64" iconPrimary="#22c55e" iconSecondary="#f0fdf4" icon="trophy"/>
-            <CountBox title="ไม่ผ่านการพิจารณา" amount={stats.rejected} textColor="red" iconPrimary="#ef4444" iconSecondary="#fef2f2" icon="trash-2"/>
+            <CountBox title="การสมัครทั้งหมด" amount={stats?.all} iconPrimary="#059669" iconSecondary="#ecfdf5" icon="book"/>
+            <CountBox title="รอพิจารณา" amount={stats?.pending} iconPrimary="#f97316" iconSecondary="#fff7ed" icon="eye"/>
+            <CountBox title="อนุมัติแล้ว" amount={stats?.approved} textColor="#226e64" iconPrimary="#22c55e" iconSecondary="#f0fdf4" icon="trophy"/>
+            <CountBox title="ไม่ผ่านการพิจารณา" amount={stats?.rejected} textColor="red" iconPrimary="#ef4444" iconSecondary="#fef2f2" icon="trash-2"/>
         </div>
         <div class="w-2/3">
             <div class="bg-[#2d6a4f] rounded-2xl p-6 text-white flex justify-between items-center shadow-md">
                 <div class="flex items-center gap-5">
                     <div class="bg-white/20 p-4 rounded-xl">
-                        <Icon name="calendar" size=35 currentColor="white"/>
+                        <Icon name="calendar" size={35} currentColor="white"/>
                     </div>
                     <div>
                         <h3 class="text-xl font-bold">รอบรับสมัครปัจจุบัน</h3>
@@ -63,7 +71,7 @@
         <div class="w-2/3">
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <Icon name="home" size=28 currentColor="green"/>
+                    <Icon name="home" size={28} currentColor="green"/>
                     <h2 class="text-xl font-bold text-gray-800">ประวัติการสมัคร {availableStatus.APPROVED.text}</h2>
                 </div>
                 <p class="text-sm text-gray-500 -mt-2">รายการสมัครนิสิตดีเด่นทั้งหมดของคุณ</p>
@@ -85,7 +93,7 @@
                                     class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow group cursor-pointer">
                                     <div class="flex items-center gap-5">
                                         <div class="bg-gray-50 p-4 rounded-xl group-hover:bg-emerald-50 transition-colors">
-                                            <Icon name={availableStatus[reg.status].icon} currentColor="green" size=28/>
+                                            <Icon name={availableStatus[reg.status].icon} currentColor="green" size={28}/>
                                         </div>
                                         <div>
                                             <h4 class="font-bold text-gray-800 text-lg">
@@ -102,7 +110,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="{ availableStatus[reg.status].bg } text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
-                                            <Icon name={availableStatus[reg.status].icon} currentColor="white" size="14" />
+                                            <Icon name={availableStatus[reg.status].icon} currentColor="white" size={14} />
                                             { availableStatus[reg.status].text }
                                         </span>
                                         <Icon name="arrow-right" class="text-gray-800" />

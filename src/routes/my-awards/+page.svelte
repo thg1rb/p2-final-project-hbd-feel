@@ -33,23 +33,30 @@
         }
     };
 </script>
+
 <div class="bg-[#f3f4f6]">
     <div class="flex flex-col items-center justify-center p-8 h-full gap-7">
         <div class="flex flex-col gap-2 w-2/3">
             <div class="flex justify-between">
-                <p class="text-3xl font-bold">สวัสดี, {student.firstName} {student.lastName}</p>
-                <div class="flex bg-[#226e64] text-md text-white items-center justify-center p-2 px-5 rounded-2xl gap-2">
-                    <Icon name="plus" currentColor="white" size={24}/> สมัครนิสิตดีเด่น
-                </div>
+                <p class="text-3xl font-bold">สวัสดี, {student?.firstName} {student?.lastName}</p>
+                <a href="/award-application/step1">
+                    <div class="flex bg-[#226e64] text-md text-white items-center justify-center p-2 px-5 rounded-2xl gap-2 cursor-pointer">
+                        <Icon name="plus" currentColor="white" size={24}/> สมัครนิสิตดีเด่น
+                    </div>
+                </a>
             </div>
-            <p class="text-sm text-gray-600">รหัสนิสิต: {student.student_id} | คณะ{student.faculty.name} | ภาควิชา{student.department.name}</p>
+            <p class="text-sm text-gray-600">
+                รหัสนิสิต: {student?.student_id} | คณะ{student?.faculty?.name} | ภาควิชา{student?.department?.name}
+            </p>
         </div>
+
         <div class="w-2/3 flex flex-wrap gap-8 justify-evenly">
             <CountBox title="การสมัครทั้งหมด" amount={stats?.all} iconPrimary="#059669" iconSecondary="#ecfdf5" icon="book"/>
             <CountBox title="รอพิจารณา" amount={stats?.pending} iconPrimary="#f97316" iconSecondary="#fff7ed" icon="eye"/>
             <CountBox title="อนุมัติแล้ว" amount={stats?.approved} textColor="#226e64" iconPrimary="#22c55e" iconSecondary="#f0fdf4" icon="trophy"/>
             <CountBox title="ไม่ผ่านการพิจารณา" amount={stats?.rejected} textColor="red" iconPrimary="#ef4444" iconSecondary="#fef2f2" icon="trash-2"/>
         </div>
+
         <div class="w-2/3">
             <div class="bg-[#2d6a4f] rounded-2xl p-6 text-white flex justify-between items-center shadow-md">
                 <div class="flex items-center gap-5">
@@ -58,12 +65,16 @@
                     </div>
                     <div>
                         <h3 class="text-xl font-bold">รอบรับสมัครปัจจุบัน</h3>
-                        <p class="opacity-90">ภาคเรียน { curr.semester ?? 'ภาคเรียนปัจจุบัน' }/{ curr.academic_year ?? 'xxx'}</p>
+                        <p class="opacity-90">
+                            ภาคเรียน { curr?.semester ?? 'ภาคเรียนปัจจุบัน' }/{ curr?.academic_year ?? 'xxx'}
+                        </p>
                     </div>
                 </div>
                 <div class="text-right">
                     <span class="bg-[#f39c12] text-white px-4 py-1 rounded-full text-sm font-bold">เปิดรับสมัคร</span>
-                    <p class="mt-2 text-sm font-light">หมดเขต: { formatThaiDate(curr.end_date) ?? '-' }</p>
+                    <p class="mt-2 text-sm font-light">
+                        หมดเขต: { curr?.end_date ? formatThaiDate(curr.end_date) : '-' }
+                    </p>
                 </div>
             </div>
         </div>
@@ -72,63 +83,53 @@
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
                     <Icon name="home" size={28} currentColor="green"/>
-                    <h2 class="text-xl font-bold text-gray-800">ประวัติการสมัคร {availableStatus.APPROVED.text}</h2>
+                    <h2 class="text-xl font-bold text-gray-800">
+                        ประวัติการสมัคร {availableStatus.APPROVED.text}
+                    </h2>
                 </div>
-                <p class="text-sm text-gray-500 -mt-2">รายการสมัครนิสิตดีเด่นทั้งหมดของคุณ</p>
+                <p class="text-sm text-gray-500 -mt-2">
+                    รายการสมัครนิสิตดีเด่นทั้งหมดของคุณ
+                </p>
 
                 <div class="flex flex-col gap-y-4 mt-4 overflow-y-auto pr-2 custom-scrollbar">
-                    <!-- @forelse($registrations as $reg) -->
-                    {#if regs.length == 0}
+                    {#if !regs || regs.length === 0}
                         <div class="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
                             <p class="text-gray-500">คุณยังไม่มีประวัติการสมัครในขณะนี้</p>
                         </div>
                     {:else}
-                        {#each regs as reg}           
-                        <script>
-                            let Rstatus: string = reg.status;
-                        </script>      
-                        
+                        {#each regs as reg}
                             <a href="/application-list/{reg.application_id}">
-                                <div 
-                                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow group cursor-pointer">
+                                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow group cursor-pointer">
                                     <div class="flex items-center gap-5">
                                         <div class="bg-gray-50 p-4 rounded-xl group-hover:bg-emerald-50 transition-colors">
-                                            <Icon name={availableStatus[reg.status].icon} currentColor="green" size={28}/>
+                                            <Icon name={availableStatus[reg.status]?.icon} currentColor="green" size={28}/>
                                         </div>
                                         <div>
                                             <h4 class="font-bold text-gray-800 text-lg">
-                                                { 'รางวัลนิสิตดีเด่น' }
+                                                รางวัลนิสิตดีเด่น
                                                 <span class="text-sm font-normal text-gray-500">
-                                            ({ reg.award_name })
-                                            <!-- ({ reg.awardable_type === 'activity' ? 'ด้านกิจกรรมเสริมหลักสูตร' : (reg.awardable_ype === 'innovation' ? 'ด้านความคิดสร้างสรรค์และนวัตกรรม' : 'ด้านความประพฤติดี') }) -->
-                                        </span>
+                                                    ({reg.award_name})
+                                                </span>
                                             </h4>
                                             <p class="text-gray-400 text-sm">
-                                                { reg.academic_year } • สมัครเมื่อ { formatThaiDate(reg.created_at) ?? "XXXX" }
+                                                {reg.academic_year} • สมัครเมื่อ {reg.created_at ? formatThaiDate(reg.created_at) : "XXXX"}
                                             </p>
                                         </div>
                                     </div>
                                     <div class="flex items-center gap-4">
-                                        <span class="{ availableStatus[reg.status].bg } text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
-                                            <Icon name={availableStatus[reg.status].icon} currentColor="white" size={14} />
-                                            { availableStatus[reg.status].text }
+                                        <span class="{availableStatus[reg.status]?.bg} text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
+                                            <Icon name={availableStatus[reg.status]?.icon} currentColor="white" size={14} />
+                                            {availableStatus[reg.status]?.text}
                                         </span>
                                         <Icon name="arrow-right" class="text-gray-800" />
                                     </div>
                                 </div>
-                            </a>       
+                            </a>
                         {/each}
                     {/if}
-                    <!-- @empty -->
-                        <!-- <div class="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-                            <p class="text-gray-500">คุณยังไม่มีประวัติการสมัครในขณะนี้</p>
-                        </div> -->
-                    <!-- @endforelse -->
                 </div>
 
-                <div class="mt-4">
-                    <!-- {{ $registrations->links() }} -->
-                </div>
+                <div class="mt-4"></div>
             </div>
         </div>
     </div>

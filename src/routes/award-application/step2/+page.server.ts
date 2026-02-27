@@ -17,11 +17,16 @@ export const load: PageServerLoad = async ({ url }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, cookies }) => {
 		const formData = await request.formData();
+		const token = cookies.get('token');
 
 		try {
-			await apiClient.post('/applications', formData);
+			await apiClient.post('/applications', formData, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			});
 		} catch (error: any) {
 			return fail(400, {
 				message:

@@ -26,7 +26,7 @@
             text: "ไม่ผ่านการพิจารณา",
             icon: "book"
         },
-        PENDING: {
+        SUBMITTED: {
             bg: "bg-orange-400",
             text: "กำลังดำเนินการ",
             icon: "book"

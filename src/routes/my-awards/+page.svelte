@@ -97,7 +97,8 @@
                             <p class="text-gray-500">คุณยังไม่มีประวัติการสมัครในขณะนี้</p>
                         </div>
                     {:else}
-                        {#each regs as reg}
+                        {#each regs as reg}               
+                        
                             <a href="/application-list/{reg.application_id}">
                                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow group cursor-pointer">
                                     <div class="flex items-center gap-5">

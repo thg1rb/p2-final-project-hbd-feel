@@ -32,6 +32,12 @@
             icon: "book"
         }
     };
+
+    function checkApprovedStatus(status: string, level:number): "APPROVED" | "SUBMITTED" {
+        return status === "APPROVED" && level === 6
+            ? "APPROVED"
+            : "SUBMITTED";
+    }
 </script>
 
 <div class="bg-[#f3f4f6]">
@@ -118,9 +124,9 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center gap-4">
-                                        <span class="{availableStatus[reg.status]?.bg} text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
-                                            <Icon name={availableStatus[reg.status]?.icon} currentColor="white" size={14} />
-                                            {availableStatus[reg.status]?.text}
+                                        <span class="{availableStatus[checkApprovedStatus(reg.status, reg.level)]?.bg} text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
+                                            <Icon name={availableStatus[checkApprovedStatus(reg.status, reg.level)]?.icon} currentColor="white" size={14} />
+                                            {availableStatus[checkApprovedStatus(reg.status, reg.level)]?.text}
                                         </span>
                                         <Icon name="arrow-right" class="text-gray-800" />
                                     </div>

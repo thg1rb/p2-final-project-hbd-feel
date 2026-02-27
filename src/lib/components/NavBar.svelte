@@ -1,7 +1,11 @@
 <script>
 	import Icon from './Icon.svelte';
+	import { page } from '$app/stores';
+	import LogoutButton from './logout-button.svelte';
+	let user = $derived($page.data.user);
 </script>
-
+{#if user}
+	
 <nav class="border-b border-gray-100 bg-white p-3 shadow-md">
 	<!-- Primary Navigation Menu -->
 	<div class="mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,6 +43,7 @@
 					</p>
 					<p class=""></p>
 				</div>
+
 				<!-- <x-dropdown align="right" width="48">
 					<x-slot name="trigger">
 						<button
@@ -75,7 +80,10 @@
 						</form>
 					</x-slot>
 				</x-dropdown> -->
+			<LogoutButton/>
+
 			</div>
+
 
 			<!-- Hamburger -->
 			<div class="-me-2 flex items-center sm:hidden">
@@ -133,3 +141,4 @@
 		</div>
 	</div>
 </nav>
+{/if}

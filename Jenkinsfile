@@ -3,12 +3,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git branch: 'develop', url: 'https://github.com/472-68-AgileDevOps/p2-final-project-backend-hbd-feel.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t myapp:latest .'
@@ -24,4 +18,5 @@ pipeline {
             }
         }
     }
+
 }

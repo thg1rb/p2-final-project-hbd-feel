@@ -1,10 +1,19 @@
 import { apiClient } from "$lib/api";
 import type { PageServerLoad } from "./$types";
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({  }) => {
-    let id = '1223338363';
+export const load: PageServerLoad = async ({ locals }) => {
+
+    if (!locals.user) {
+        throw redirect(302, '/login');
+    }
+
     try {
+        console.log(locals.user)
+        const id = locals.user.student_id;
+        console.log(id)
         const response = await apiClient.get(`/application/student/${id}`)
+
 
         // console.log('loading data');
         // console.log(response.data);

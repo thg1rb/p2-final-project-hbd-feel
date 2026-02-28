@@ -14,29 +14,31 @@
 	const application = $derived(data.application);
 	const approvals = $derived(data.approvals);
 
-	// TODO: Use user from cookies instead
-
 	const { currentLevel, previousLevel } = $derived.by(() => {
 		let currentLevel = RoleLevel['ASSO_DEAN'];
-		switch (data.user?.role) {
+		switch (data.user.role) {
 			case UserRole.DEPT_HEAD:
 				currentLevel = RoleLevel['DEPT_HEAD'];
+				break;
 			case UserRole.ASSO_DEAN:
 				currentLevel = RoleLevel['ASSO_DEAN'];
+				break;
 			case UserRole.DEAN:
 				currentLevel = RoleLevel['DEAN'];
+				break;
 			case UserRole.BOARD:
 				currentLevel = RoleLevel['BOARD'];
+				break;
 			case UserRole.BOARD_HEAD:
 				currentLevel = RoleLevel['BOARD_HEAD'];
+				break;
 			case UserRole.NISIT:
 				currentLevel = RoleLevel['NISIT'];
+				break;
 		}
 		const previousLevel = currentLevel - 1 < 0 ? currentLevel : currentLevel - 1;
 		return { currentLevel, previousLevel };
 	});
-
-	console.log(currentLevel, previousLevel);
 
 	const status: string = $derived.by(() => {
 		if (application === undefined) return '';
@@ -113,7 +115,7 @@
 			<div class={`flex flex-1 flex-col gap-6`}>
 				<Progression {approvals} />
 				{#if application.level === previousLevel && role !== UserRole.NISIT}
-					<ApproveSection {form} {role} />
+					<ApproveSection {form} />
 				{/if}
 			</div>
 		</div>

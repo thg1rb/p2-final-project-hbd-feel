@@ -1,4 +1,4 @@
-import type { ApplicationStatus, ApprovalRole } from "./enums"
+import type { ApplicationStatus, ApprovalRole, UserRole } from "./enums"
 
 export interface Application {
   award: Award,
@@ -100,4 +100,11 @@ export interface ApprovalUser {
   firstName: string,
   lastName: string,
   role: ApprovalRole,
+}
+
+export interface UserFromToken {
+  name: string
+  email: string
+  role: UserRole
+  studentID: string
 }

@@ -1,6 +1,5 @@
 <script lang="ts">
-	export let role: string;
-	export let desc: string;
+	let { role, desc }: { role: string; desc: string } = $props();
 </script>
 
 <div class="flex flex-col gap-2">

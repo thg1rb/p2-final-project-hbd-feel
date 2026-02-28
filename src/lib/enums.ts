@@ -48,3 +48,24 @@ export const roleMap: Record<string, ApprovalRole> = {
   'BOARD_HEAD': ApprovalRole.BOARD_HEAD,
   'CHANCELLOR': ApprovalRole.CHANCELLOR
 }
+
+export enum UserRole {
+  DEPT_HEAD = 'หัวหน้าภาควิชา',
+  ASSO_DEAN = 'รองคณบดี',
+  DEAN = 'คณบดี',
+  ADMIN = 'กองพัฒนานิสิต',
+  BOARD = 'คณะกรรมการ',
+  BOARD_HEAD = 'ประธานคณะกรรมการ',
+  CHANCELLOR = 'อธิการบดี',
+  NISIT = "นิสิต"
+}
+export const roleMapUserRole: Record<string, UserRole> = {
+  'DEPT_HEAD': UserRole.DEPT_HEAD,
+  'ASSO_DEAN': UserRole.ASSO_DEAN,
+  'DEAN': UserRole.DEAN,
+  'ADMIN': UserRole.ADMIN,
+  'BOARD': UserRole.BOARD,
+  'BOARD_HEAD': UserRole.BOARD_HEAD,
+  'CHANCELLOR': UserRole.CHANCELLOR,
+  'NISIT': UserRole.NISIT,
+}

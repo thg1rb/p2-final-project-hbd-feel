@@ -4,6 +4,7 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { ActionData } from '../$types';
 	import { toastStack } from '$lib/stores/toast.svelte';
+	import { UserRole } from '$lib/enums';
 
 	let { form = null }: { form: ActionData } = $props();
 

@@ -1,16 +1,58 @@
 import { apiClient } from "$lib/api";
-import type { Application } from "$lib/type";
+import type { Application, User, UserFromToken } from "$lib/type";
+import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from './$types';
+import { roleMapUserRole, UserRole } from "$lib/enums";
 
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async ({ url, cookies }) => {
   const search = url.searchParams.get('search') || '';
   const status = url.searchParams.get('status') || '';
   const page = parseInt(url.searchParams.get('page') || '1');
+  const token = cookies.get('token');
+  const userToken = cookies.get('user_info')
+  let user: UserFromToken = {
+    name: "",
+    email: "",
+    role: UserRole.NISIT,
+    studentID: ""
+  };
+
+  if (userToken) {
+    try {
+      const decoded = Buffer.from(userToken, 'base64').toString('utf-8');
+      const newUser = JSON.parse(decoded);
+      user = {
+        name: newUser['name'],
+        email: newUser['email'],
+        role: roleMapUserRole[newUser['role']],
+        studentID: newUser['student_id'],
+      }
+      if (user.role === UserRole.NISIT) {
+        throw redirect(303, '/');
+      }
+    } catch (e) {
+      throw redirect(303, '/');
+    }
+  } else {
+    throw redirect(303, '/');
+  }
+
+  console.log("TOKEN: ", token)
+
 
   try {
     const [applicationsResponse, countResponse] = await Promise.all([
-      apiClient.get('/applications', { params: { search, status, page } }),
-      apiClient.get('/applications/count'),
+      apiClient.get('/applications', {
+        params: { search, status, page },
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }),
+      apiClient.get('/applications/count', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }),
     ]);
 
     const count = {
@@ -21,6 +63,7 @@ export const load: PageServerLoad = async ({ url }) => {
     }
 
     return {
+      user: user,
       applications: applicationsResponse.data.data as Application[],
       search,
       status,
@@ -38,6 +81,7 @@ export const load: PageServerLoad = async ({ url }) => {
     console.error('--- LOG END ---');
 
     return {
+      user: user,
       applications: [],
       search,
       status,

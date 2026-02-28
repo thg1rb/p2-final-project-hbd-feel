@@ -5,35 +5,7 @@
 	import ApplicationHeader from '$lib/components/application/ApplicationHeader.svelte';
 	import type { Application } from '$lib/type';
 	import type { PageData } from './$types';
-	import { ApprovalRole } from '$lib/enums';
-
-	// TODO: Use user from cookies instead
-	let role = ApprovalRole.BOARD as ApprovalRole;
-
-	let desc: string = '';
-	let currentLevel: number = 0;
-	switch (role) {
-		case ApprovalRole.DEPT_HEAD:
-			desc = 'จัดการรายละเอียดนิสิตดีเด่นในภาควิชา, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
-			currentLevel = 1;
-			break;
-		case ApprovalRole.ASSO_DEAN:
-			desc = 'จัดการรายละเอียดนิสิตดีเด่นภายในคณะ, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
-			currentLevel = 2;
-			break;
-		case ApprovalRole.DEAN:
-			desc = 'จัดการรายละเอียดนิสิตดีเด่นภายในคณะ, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
-			currentLevel = 3;
-			break;
-		case ApprovalRole.ADMIN:
-			desc = 'จัดการรายละเอียดนิสิตดีเด่น, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
-			currentLevel = 4;
-			break;
-		case ApprovalRole.BOARD:
-			desc = 'จัดการรายละเอียดนิสิตดีเด่น, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
-			currentLevel = 5;
-			break;
-	}
+	import { ApprovalRole, UserRole } from '$lib/enums';
 
 	const statusOptions = {
 		pending: 'PENDING',
@@ -42,14 +14,42 @@
 	};
 
 	let { data }: { data: PageData } = $props();
+
+	const info = $derived.by(() => {
+		let desc: string = '';
+		let currentLevel: number = 0;
+		switch (data.user.role) {
+			case UserRole.DEPT_HEAD:
+				desc = 'จัดการรายละเอียดนิสิตดีเด่นในภาควิชา, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
+				currentLevel = 1;
+				break;
+			case UserRole.ASSO_DEAN:
+				desc = 'จัดการรายละเอียดนิสิตดีเด่นภายในคณะ, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
+				currentLevel = 2;
+				break;
+			case UserRole.DEAN:
+				desc = 'จัดการรายละเอียดนิสิตดีเด่นภายในคณะ, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
+				currentLevel = 3;
+				break;
+			case UserRole.ADMIN:
+				desc = 'จัดการรายละเอียดนิสิตดีเด่น, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
+				currentLevel = 4;
+				break;
+			case UserRole.BOARD:
+				desc = 'จัดการรายละเอียดนิสิตดีเด่น, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
+				currentLevel = 5;
+				break;
+		}
+		return { desc, currentLevel };
+	});
 </script>
 
 <div class="flex flex-col gap-7 p-10">
-	<ApplicationHeader {role} {desc} />
+	<ApplicationHeader role={data.user.role} desc={info.desc} />
 	<ApprovalStats stats={data.stats} />
 	<RequestTable
 		applications={data.applications as Application[]}
-		{currentLevel}
+		currentLevel={info.currentLevel}
 		{statusOptions}
 		searchQuery={data.search || ''}
 		statusFilter={data.status || ''}

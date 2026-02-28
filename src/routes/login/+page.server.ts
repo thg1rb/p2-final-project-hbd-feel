@@ -8,29 +8,24 @@ export const actions: Actions = {
         const data = await request.formData();
         const credential = data.get('credential');
         const password = data.get('password');
-        console.log(credential)
-        console.log(password)
         try {
             const response = await apiClient.post('/login', {
                 credential: credential,
                 password: password,
             })
-            console.log(response)
-    
+            console.log("RESPONSE: ", response.data.user)
+
             const token = response.data.token;
             const user = response.data.user;
-    
-            console.log(token)
-            console.log(user)
-    
+
             cookies.set('token', token, {
                 path: '/',
                 httpOnly: true,
                 sameSite: 'lax',
-                secure: process.env.NODE_ENV === 'production', 
+                secure: process.env.NODE_ENV === 'production',
                 maxAge: 60 * 60 * 24 * 7 // 7 days
             })
-    
+
             const userBase64 = Buffer.from(JSON.stringify(user)).toString('base64');
             cookies.set('user_info', userBase64, { path: '/', maxAge: 60 * 60 * 24 * 7 });
             if (user.role == 'NISIT') {
@@ -39,7 +34,10 @@ export const actions: Actions = {
             if (user.role === 'ADMIN') {
                 throw redirect(303, '/application-list')
             }
-        } catch(err) {
+            if (user.role === 'ASSO_DEAN' || user.role === 'DEAN' || user.role === 'DEPT_HEAD') {
+                throw redirect(303, '/application-list')
+            }
+        } catch (err) {
             console.log(err);
             if (err?.status === 303) throw err;
             if (err.status === 401) {

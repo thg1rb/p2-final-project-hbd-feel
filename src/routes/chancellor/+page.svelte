@@ -11,6 +11,7 @@
 	import { updateLanguageServiceSourceFile } from 'typescript';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
+	import { downloadTableAsPDF } from '$lib/utils/pdf';
 
 	const statusOptions = {
 		pending: 'PENDING',
@@ -62,6 +63,38 @@
 
 	let isDownloading = $state(false);
 
+	let isLoading = $state(false);
+
+	let contentRef: HTMLDivElement; // ← เพิ่ม
+
+	async function handleDownload() {
+		isLoading = true;
+
+		const headers = [
+			'ลำดับ',
+			'รหัสนิสิต',
+			'ชื่อ-นามสกุล',
+			'คณะ',
+			'ภาควิชา',
+			'ชั้นปี',
+			'ประเภทรางวัล'
+		];
+
+		const response = await fetch('/api/export-csv');
+
+		if (!response.ok) {
+			throw new Error('ไม่สามารถดึงข้อมูลได้');
+		}
+
+		const allApplications: Application[] = await response.json();
+
+		console.log(allApplications);
+
+		await downloadTableAsPDF(allApplications, headers, 'student_report.pdf', data.user.name);
+
+		isLoading = false;
+	}
+
 	const handleDownloadClick = async () => {
 		if (isDownloading) return;
 
@@ -85,7 +118,7 @@
 	};
 
 	const exportToCSV = (data: Application[]) => {
-		const headers = ['รหัสนิสิต', 'ชื่อ-นามสกุล', 'คณะ', 'ภาควิชา', 'ชั้นปี', 'ประเภทรางวัล'];
+		const headers = ['ลำดับ', 'รหัสนิสิต', 'ชื่อ-นามสกุล', 'คณะ', 'ภาควิชา', 'ประเภทรางวัล'];
 
 		const rows = data.map((app) => [
 			app.user.student_id,
@@ -158,12 +191,12 @@
 
 						<div class="flex w-full items-stretch gap-5">
 							<button
-								disabled={isDownloading}
-								onclick={handleDownloadClick}
+								onclick={handleDownload}
+								disabled={isLoading}
 								class="button-effect flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-blue-500 shadow-lg disabled:opacity-50"
 							>
 								<Icon name="download" size={18} />
-								<span class="text-sm">ดาวน์โหลดข้อมูลนิสิตดีเด่น (CSV)</span>
+								<span class="text-sm">ดาวน์โหลดข้อมูลนิสิตดีเด่น</span>
 							</button>
 
 							<form
@@ -226,7 +259,4 @@
 			</div>
 		</div>
 	{/if}
-	<a href="/api/test-pdf" class="rounded-lg bg-blue-500 px-4 py-2 text-white" download>
-		ทดสอบดาวน์โหลด PDF
-	</a>
 </div>

@@ -39,6 +39,9 @@ export const actions: Actions = {
             if (user.role === 'ASSO_DEAN' || user.role === 'DEAN' || user.role === 'DEPT_HEAD') {
                 throw redirect(303, '/application-list')
             }
+            if (user.role === 'CHANCELLOR') {
+                throw redirect(303, '/chancellor')
+            }
         } catch (err) {
             console.log(err);
             if (err?.status === 303) throw err;

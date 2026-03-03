@@ -27,6 +27,9 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/myapp-frontend:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/myapp-frontend:latest
+          build-args: |
+            PUBLIC_BROWSER_API_BASE_URL=${{ secrets.PUBLIC_BROWSER_API_BASE_URL }}
+            PUBLIC_DOCKER_API_BASE_URL=${{ secrets.PUBLIC_DOCKER_API_BASE_URL }}
   deploy:
     needs: build-docker
     runs-on: self-hosted

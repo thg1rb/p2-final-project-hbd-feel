@@ -48,6 +48,7 @@
 	<ApplicationHeader role={data.user.role} desc={info.desc} />
 	<ApprovalStats stats={data.stats} />
 	<RequestTable
+		user={data.user}
 		applications={data.applications as Application[]}
 		currentLevel={info.currentLevel}
 		{statusOptions}

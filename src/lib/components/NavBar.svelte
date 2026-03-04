@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import LogoutButton from './logout-button.svelte';
 	import { roleMapUserRole } from '$lib/enums';
+	import AuthDropDown from './AuthDropDown.svelte';
 	let user = $derived($page.data.user);
 	console.log(user);
 </script>
@@ -12,28 +13,38 @@
 		<!-- Primary Navigation Menu -->
 		<div class="mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="flex h-16 items-center justify-between">
-				<div class="flex gap-3">
-					<!-- Logo -->
-					<!-- <div class="flex shrink-0 items-center">
-					<a> </a>
-				</div> -->
+				<a href={`${$page.data?.user?.role === "NISIT" ? "/my-awards" : ""}`}>
+					<div class="flex gap-3">
+						<!-- Logo -->
+						<!-- <div class="flex shrink-0 items-center">
+						<a> </a>
+					</div> -->
 
-					<div class=" flex items-center justify-center rounded-xl bg-primary p-3">
-						<Icon name="badge" size={24} class="stroke-white"></Icon>
+						<div class=" flex items-center justify-center rounded-xl bg-primary p-3">
+							<Icon name="badge" size={24} class="stroke-white"></Icon>
+						</div>
+
+						<!-- Navigation Links -->
+						<!-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+						<x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+						
+						</x-nav-link>
+					</div> -->
+
+						<div class="font-thai flex flex-col gap-1">
+							<p class=" font-bold">นิสิตดีเด่น</p>
+							<p class="text-sm">มหาวิทยาลัยเกษตรศาสตร์</p>
+						</div>
+						<!-- {#if $page.data?.user?.role == "NISIT"}
+							<a href="/my-awards" class="mx-10 flex justify-center items-center">
+								<div class=" p-3 rounded-full hover:text-blue-500 text-lg">
+									<p>รางวัลของฉัน</p>
+								</div>
+							</a>
+						{/if} -->
+
 					</div>
-
-					<!-- Navigation Links -->
-					<!-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-					<x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                       
-                    </x-nav-link>
-				</div> -->
-
-					<div class="font-thai flex flex-col gap-1">
-						<p class=" font-bold">นิสิตดีเด่น</p>
-						<p class="text-sm">มหาวิทยาลัยเกษตรศาสตร์</p>
-					</div>
-				</div>
+				</a>
 
 				<!-- Settings Dropdown -->
 				<div class="hidden sm:ms-6 sm:flex sm:items-center">
@@ -82,7 +93,8 @@
 						</form>
 					</x-slot>
 				</x-dropdown> -->
-					<LogoutButton />
+					<!-- <LogoutButton /> -->
+					<AuthDropDown />
 				</div>
 
 				<!-- Hamburger -->

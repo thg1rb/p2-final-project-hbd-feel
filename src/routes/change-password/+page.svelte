@@ -50,6 +50,11 @@
                     disabled={isLoading}
                     required
                 >
+                {#if form?.errors?.current_password}
+                    <p class="text-red-500 text-sm mt-1">
+                        {form.errors.current_password[0]}
+                    </p>
+                {/if}
             </div>
         {/if}
 

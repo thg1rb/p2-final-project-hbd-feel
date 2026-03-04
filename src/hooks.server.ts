@@ -13,7 +13,7 @@ export const handle: Handle = async ({ event, resolve }) => {
             if ( 
                 event.locals.user &&
                 event.locals.user.force_password_change &&
-                event.url.pathname !== '/change-password'
+                (event.url.pathname !== '/change-password' && event.url.pathname !== '/logout')
             ) {
                 throw redirect(303, '/change-password#forced');
             }

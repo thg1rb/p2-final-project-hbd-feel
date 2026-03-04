@@ -27,9 +27,18 @@ export const actions: Actions = {
                 }
             );
             
+            const me = await apiClient.get('/me', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
 
+            const updatedUser = me.data.user;
+            const userBase64 = Buffer.from(JSON.stringify(updatedUser)).toString('base64');
+            cookies.set('user_info', userBase64, { path: '/', maxAge: 60 * 60 * 24 * 7 });
 
             const user = locals.user;
+            
             if (!user) {
                 redirect(303, '/login');
             }

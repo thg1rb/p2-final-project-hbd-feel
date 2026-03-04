@@ -11,13 +11,14 @@ export const handle: Handle = async ({ event, resolve }) => {
             const jsonString = Buffer.from(userInfoCookie, 'base64').toString('utf-8');
             event.locals.user = JSON.parse(jsonString);
             if ( 
-                JSON.parse(jsonString).force_password_change &&
-                event.url.pathname !== '/change-password#forced'
+                event.locals.user &&
+                event.locals.user.force_password_change &&
+                event.url.pathname !== '/change-password'
             ) {
                 throw redirect(303, '/change-password#forced');
             }
         } catch (err) {
-            console.log(err)
+            if (err.status === 303) throw err;
             event.cookies.delete('token', { path: '/' });
             event.cookies.delete('user_info', { path: '/' });
         }

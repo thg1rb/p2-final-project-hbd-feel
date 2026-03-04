@@ -2,6 +2,8 @@
     import googleLogo from '$lib/assets/images/google.png';
     import { enhance } from '$app/forms';
     import type { ActionData, SubmitFunction } from '@sveltejs/kit';
+    import { onMount } from 'svelte';
+	import { toastStack } from '$lib/stores/toast.svelte';
 
     let { form }: { form: ActionData } = $props();
 
@@ -15,6 +17,13 @@
             isLoading = false; 
         };
     };
+
+    onMount(() => {
+
+		if (window.location.hash === '#notFound') {
+			toastStack.add("ไม่พบผู้ใช้ กรุณาติดต่อผู้ดูแลระบบ", 'error', 3000);
+		}
+	});
 </script>
 
 <div class="flex flex-col gap-5 right-0 left-0 top-0 bottom-0 bg-gray-50 justify-center items-center w-full h-screen">
@@ -27,7 +36,7 @@
         <!-- <p>Login</p> -->
 
         <div>
-            <button on:click={() => {alert("N/A")}} class="flex items-center gap-2 rounded-4xl border shadow-mg p-3 px-6 hover:cursor-pointer hover:scale-105"
+            <button on:click={() => {window.location.href = "http://localhost/auth/google/redirect?from=svelte";}} class="flex items-center gap-2 rounded-4xl border shadow-mg p-3 px-6 hover:cursor-pointer hover:scale-105"
             >
             <img src={googleLogo} alt="google" class="size-4">
             ดำเนินการต่อด้วย Google

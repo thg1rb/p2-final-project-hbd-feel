@@ -28,7 +28,7 @@
 
 <div class="flex flex-col gap-5 right-0 left-0 top-0 bottom-0 bg-gray-50 justify-center items-center w-full h-screen">
     <div class="text-2xl flex flex-col justify-center items-center">
-        <p class="text-2xl">ยินดีตอนรับสู่<span class="text-green-600">ระบบนิสิตดีเด่น!</span></p>
+        <p class="text-2xl">ยินดีตอนรับเข้าสู่<span class="text-green-600">ระบบนิสิตดีเด่น!</span></p>
         <p class="text-lg">โปรดเข้าสู่ระบบก่อนใช้งาน</p>
     </div>
     <div class="rounded-2xl shadow-lg bg-white px-20 py-10 flex flex-col gap-3 justify-center items-center">

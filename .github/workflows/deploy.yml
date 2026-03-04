@@ -30,6 +30,7 @@ jobs:
           build-args: |
             PUBLIC_BROWSER_API_BASE_URL=${{ secrets.PUBLIC_BROWSER_API_BASE_URL }}
             PUBLIC_DOCKER_API_BASE_URL=${{ secrets.PUBLIC_DOCKER_API_BASE_URL }}
+
   deploy:
     needs: build-docker
     runs-on: self-hosted
@@ -50,7 +51,8 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl create namespace ${K8S_NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -
-
+          
+          # สมมติว่าไฟล์ k8s รวมกันอยู่ในโฟลเดอร์ k8s/
           kubectl apply -f k8s/ -n ${K8S_NAMESPACE}
 
           kubectl patch ingress myapp-ingress \

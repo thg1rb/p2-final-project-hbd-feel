@@ -17,6 +17,8 @@ export const actions: Actions = {
 
             const token = response.data.token;
             const user = response.data.user;
+            const force_password_change = response.data.user.force_password_change
+            console.log(`force? : ${force_password_change}`)
 
             cookies.set('token', token, {
                 path: '/',
@@ -28,6 +30,9 @@ export const actions: Actions = {
 
             const userBase64 = Buffer.from(JSON.stringify(user)).toString('base64');
             cookies.set('user_info', userBase64, { path: '/', maxAge: 60 * 60 * 24 * 7 });
+            if (force_password_change) {
+                redirect(303, '/change-password#forced');
+            }
             if (user.role == 'NISIT') {
                 throw redirect(303, '/my-awards')
             }
@@ -40,8 +45,13 @@ export const actions: Actions = {
         } catch (err) {
             console.log(err);
             if (err?.status === 303) throw err;
-            if (err.status === 401) {
-                return fail(401, "Invalid Credential")
+            if (err?.response?.status === 401) {
+                return fail(401, {
+                    message: err.response.data.message || "Invalid credentials",
+                    errors: err.response.data.errors || {
+                        credential: ["ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"]
+                    }
+                });
             }
         }
 

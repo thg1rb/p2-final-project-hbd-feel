@@ -29,6 +29,10 @@ export const load: PageServerLoad = async ({url, cookies}) => {
         const userBase64 = Buffer.from(JSON.stringify(user)).toString('base64');
         cookies.set('user_info', userBase64, { path: '/', maxAge: 60 * 60 * 24 * 7 });
 
+        if (url.searchParams.get('activate')) {
+            throw redirect(303, '/change-password#forced');
+        }
+
         if (user.role == 'NISIT') {
             throw redirect(303, '/my-awards')
         }

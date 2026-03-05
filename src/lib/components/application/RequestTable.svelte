@@ -82,21 +82,18 @@
 
 <div class="flex w-full flex-col gap-y-6 rounded-xl bg-white p-5 shadow-sm">
 	<form onsubmit={handleSubmit} class="flex w-full flex-col gap-2.5 md:flex-row">
-		<div class="flex flex-1 flex-row gap-x-2.5">
-			<div class="relative flex-2">
-				<Icon name="search" class="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400"></Icon>
-				<input
-					name="search"
-					value={searchQuery}
-					placeholder="ค้นหาจากรหัสใบสมัคร ชื่อจริง หรือรหัสนิสิต"
-					class="w-full rounded-md border-gray-300 pl-10 placeholder:font-light placeholder:text-slate-400 focus:border-primary focus:ring-primary"
-				/>
-			</div>
+		<div class="flex flex-1 flex-row items-stretch gap-x-2.5">
+			<input
+				name="search"
+				value={searchQuery}
+				placeholder="ค้นหาจากรหัสใบสมัคร ชื่อจริง หรือรหัสนิสิต"
+				class="w-full rounded-2xl border-gray-300 text-sm placeholder:font-light placeholder:text-slate-400 focus:border-primary focus:ring-primary"
+			/>
 			{#if needFilter === undefined}
 				<select
 					name="status"
 					value={statusFilter}
-					class="cursor-pointer rounded-md border-slate-300 px-10 py-1.5 text-[18px] font-semibold focus:border-primary focus:ring-primary"
+					class="cursor-pointer rounded-2xl border-slate-300 px-7 text-sm font-semibold focus:border-primary focus:ring-primary"
 				>
 					<option value="">ทั้งหมด</option>
 					<option value={statusOptions.pending}>รอพิจารณา</option>
@@ -107,9 +104,9 @@
 		</div>
 		<button
 			type="submit"
-			class="cursor-pointer rounded-md bg-primary px-10 py-1.5 text-[18px] font-semibold text-white focus:border-primary focus:ring-primary"
+			class="button-effect cursor-pointer rounded-2xl bg-primary p-3 font-semibold text-white focus:border-primary focus:ring-primary"
 		>
-			ค้นหา
+			<Icon name="search" class=" text-white" size={20}></Icon>
 		</button>
 	</form>
 	<div class="overflow-auto rounded-xl border border-gray-300 bg-white">
@@ -125,11 +122,11 @@
 					<th class="  p-4 text-start"></th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-300">
+			<tbody class="divide-y divide-gray-300 text-sm">
 				{#each applications as app}
 					<tr class="">
-						<td class=" p-4">{app.user.firstName} {app.user.lastName}</td>
-						<td class=" p-4">{app.user.student_id}</td>
+						<td class=" p-4 text-sm">{app.user.firstName} {app.user.lastName}</td>
+						<td class=" p-4 text-sm">{app.user.student_id}</td>
 						<td class=" p-4">{app.user.department.name}</td>
 						<td class=" p-4">{app.award.name}</td>
 						<td class=" p-4">

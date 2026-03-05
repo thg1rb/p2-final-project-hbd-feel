@@ -70,7 +70,21 @@
 		<div class="flex flex-col gap-2">
 			<div class="flex items-center justify-start gap-3">
 				<p class="text-2xl font-bold">{application?.id}</p>
-				{#if role !== UserRole.NISIT}
+				{#if role === UserRole.CHANCELLOR}
+					{#if application.level === 6}
+						<div
+							class="w-fit rounded-full border border-emerald-400 bg-emerald-50 px-3 py-1 text-sm text-emerald-400"
+						>
+							อนุมัติ
+						</div>
+					{:else}
+						<div
+							class=" rounded-full border border-amber-400 bg-amber-100 px-3 py-1 text-amber-400"
+						>
+							รอพิจารณา
+						</div>
+					{/if}
+				{:else if role !== UserRole.NISIT}
 					{#if application.status === ApprovalStatus.APPROVED && application.level === previousLevel}
 						<div
 							class=" rounded-full border border-amber-400 bg-amber-100 px-3 py-1 text-amber-400"

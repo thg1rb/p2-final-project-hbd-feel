@@ -26,6 +26,8 @@ export const actions: Actions = {
                 maxAge: 60 * 60 * 24 * 7 // 7 days
             })
 
+            console.log("TOKEN: ", token)
+
             const userBase64 = Buffer.from(JSON.stringify(user)).toString('base64');
             cookies.set('user_info', userBase64, { path: '/', maxAge: 60 * 60 * 24 * 7 });
             if (user.role == 'NISIT') {
@@ -36,6 +38,9 @@ export const actions: Actions = {
             }
             if (user.role === 'ASSO_DEAN' || user.role === 'DEAN' || user.role === 'DEPT_HEAD') {
                 throw redirect(303, '/application-list')
+            }
+            if (user.role === 'CHANCELLOR') {
+                throw redirect(303, '/chancellor')
             }
         } catch (err) {
             console.log(err);

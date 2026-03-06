@@ -26,7 +26,7 @@
 			<p>นิสิตที่รอการอนุมัติ</p>
 			<p class="text-2xl font-bold">{stats?.pending || 0}</p>
 		</div>
-		<div class="rounded-xl bg-gray-400 p-3">
+		<div class="rounded-xl bg-amber-400 p-3">
 			<Icon name="loading" class="stroke-white"></Icon>
 		</div>
 	</div>

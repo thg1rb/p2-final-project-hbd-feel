@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: development
     container_name: svelte-app-dev
     ports:
       - "3000:3000"

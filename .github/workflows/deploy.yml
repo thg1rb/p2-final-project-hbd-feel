@@ -7,7 +7,37 @@ on:
       - develop
 
 jobs:
+  test-and-analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run Tests and Generate Coverage
+        run: yarn test:coverage
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=myapp-frontend
+            -Dsonar.sources=src
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.exclusions=**/node_modules/**,**/.svelte-kit/**,**/build/**
+
   build-docker:
+    needs: test-and-analyze
     runs-on: ubuntu-latest
 
     steps:
@@ -19,17 +49,31 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=myapp-frontend
+            -Dsonar.sources=src
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.exclusions=**/node_modules/**,**/.svelte-kit/**,**/build/**
+
       - name: Build and Push Image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
+          target: production
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/myapp-frontend:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/myapp-frontend:latest
           build-args: |
             PUBLIC_BROWSER_API_BASE_URL=${{ secrets.PUBLIC_BROWSER_API_BASE_URL }}
             PUBLIC_DOCKER_API_BASE_URL=${{ secrets.PUBLIC_DOCKER_API_BASE_URL }}
+
   deploy:
     needs: build-docker
     runs-on: self-hosted
@@ -50,7 +94,8 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl create namespace ${K8S_NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -
-
+          
+          # สมมติว่าไฟล์ k8s รวมกันอยู่ในโฟลเดอร์ k8s/
           kubectl apply -f k8s/ -n ${K8S_NAMESPACE}
 
           kubectl patch ingress myapp-ingress \

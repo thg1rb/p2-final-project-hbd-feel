@@ -96,7 +96,7 @@
             </div>
 
             <div class="w-full flex justify-end">
-                <a href="">
+                <a href="/forgot-password">
                     <p class="text-gray-600 underline hover:cursor-pointer">ลืมรหัสผ่าน?</p>
                 </a>
             </div>

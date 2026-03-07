@@ -38,7 +38,7 @@ jobs:
           retention-days: 1
 
   sonarqube-analyze:
-    needs: test
+    needs: svelte-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,7 +62,7 @@ jobs:
             -Dsonar.exclusions=**/node_modules/**,**/.svelte-kit/**,**/build/**
 
   build-docker:
-    needs: analyze
+    needs: sonarqube-analyze
     runs-on: ubuntu-latest
 
     steps:

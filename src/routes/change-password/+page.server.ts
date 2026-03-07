@@ -52,7 +52,7 @@ export const actions: Actions = {
             if (user.role === 'ASSO_DEAN' || user.role === 'DEAN' || user.role === 'DEPT_HEAD') {
                 throw redirect(303, '/application-list')
             }
-        } catch (err) {
+        } catch (err : any) {
             console.log(err);
             if (err?.status === 303) throw err;
             if (err.status === 401) {

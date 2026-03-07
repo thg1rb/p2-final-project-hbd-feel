@@ -1,7 +1,8 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
-    import type { ActionData, SubmitFunction } from '@sveltejs/kit';
+    import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
+	import type { ActionData } from './$types';
 
     let { form }: { form: ActionData } = $props();
 
@@ -27,10 +28,15 @@
 
 </script>
 
-<div class="flex flex-col gap-5 right-0 left-0 top-0 bottom-0 bg-gray-50 justify-center items-center w-full h-screen">
+<div class="fixed inset-x-0 top-22 bottom-0 bg-gray-50 flex flex-col gap-5 justify-center items-center">
     <div class="text-2xl flex flex-col justify-center items-center">
-        <p class="text-2xl">ยินดีตอนรับสู่<span class="text-green-600">ระบบนิสิตดีเด่น!</span></p>
-        <p class="text-lg">โปรดเปลี่ยนรหัสผ่านในการเข้าใช้งานครั้งแรก</p>
+        {#if forced}
+            <p class="text-2xl">ยินดีตอนรับสู่<span class="text-green-600">ระบบนิสิตดีเด่น!</span></p>
+            <p class="text-lg">โปรดเปลี่ยนรหัสผ่านในการเข้าใช้งานครั้งแรก</p>
+        {:else}
+            <p class="text-2xl">เปลี่ยน<span class="text-green-600">รหัสผ่าน</span></p>
+            <p class="text-lg">โปรดกรอกข้อมูลด้านล่างให้ถูกต้องและครบถ้วน</p>
+        {/if}
     </div>
     <div class="rounded-2xl shadow-lg bg-white px-20 py-10 flex flex-col gap-3 justify-center items-center">
         <!-- <p class="text-2xl mb-5">เข้าสู่ระบบ</p> -->

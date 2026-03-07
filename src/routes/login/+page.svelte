@@ -1,9 +1,10 @@
 <script lang="ts">
     import googleLogo from '$lib/assets/images/google.png';
     import { enhance } from '$app/forms';
-    import type { ActionData, SubmitFunction } from '@sveltejs/kit';
+    import type { SubmitFunction } from '@sveltejs/kit';
     import { onMount } from 'svelte';
 	import { toastStack } from '$lib/stores/toast.svelte';
+	import type { ActionData } from './$types';
 
     let { form }: { form: ActionData } = $props();
 

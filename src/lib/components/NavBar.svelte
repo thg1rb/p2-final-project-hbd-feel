@@ -13,7 +13,7 @@
 		<!-- Primary Navigation Menu -->
 		<div class="mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="flex h-16 items-center justify-between">
-				<a href={`${$page.data?.user?.role === "NISIT" ? "/my-awards" : ""}`}>
+				<a href={`${$page.data?.user?.role === "NISIT" ? "/my-awards" : "/application-list"}`}>
 					<div class="flex gap-3">
 						<!-- Logo -->
 						<!-- <div class="flex shrink-0 items-center">
@@ -27,7 +27,7 @@
 						<!-- Navigation Links -->
 						<!-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
 						<x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-						
+
 						</x-nav-link>
 					</div> -->
 
@@ -88,7 +88,7 @@
 							<x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                              
+
                             </x-dropdown-link>
 						</form>
 					</x-slot>
@@ -146,7 +146,7 @@
 						<!-- <x-responsive-nav-link :href="route('logout')"
                         onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                      
+
                     </x-responsive-nav-link> -->
 					</form>
 				</div>

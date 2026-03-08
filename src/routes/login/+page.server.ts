@@ -47,7 +47,7 @@ export const actions: Actions = {
             if (user.role === 'CHANCELLOR') {
                 throw redirect(303, '/chancellor')
             }
-        } catch (err) {
+        } catch (err : any) {
             console.log(err);
             if (err?.status === 303) throw err;
             if (err?.response?.status === 401) {

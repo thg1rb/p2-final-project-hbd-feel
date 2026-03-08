@@ -51,7 +51,7 @@
 			case UserRole.DEAN:
 				currentLevel = 3;
 				break;
-			case UserRole.ADMIN:
+			case UserRole.NISIT_DEV:
 				currentLevel = 4;
 				break;
 			case UserRole.BOARD:

@@ -11,7 +11,6 @@ export enum ApprovalRole {
 	DEAN = 'คณบดี',
 	NISIT_DEV = 'กองพัฒนานิสิต',
 	BOARD = 'คณะกรรมการ',
-	BOARD_HEAD = 'ประธานคณะกรรมการ',
 	CHANCELLOR = 'อธิการบดี'
 }
 
@@ -21,8 +20,7 @@ export enum RoleLevel {
 	ASSO_DEAN = 2,
 	DEAN = 3,
 	NISIT_DEV = 4,
-	BOARD = 5,
-	BOARD_HEAD = 6
+	BOARD = 5
 }
 
 export const roleMapApprovalRole: Record<string, ApprovalRole> = {
@@ -31,7 +29,6 @@ export const roleMapApprovalRole: Record<string, ApprovalRole> = {
 	DEAN: ApprovalRole.DEAN,
 	NISIT_DEV: ApprovalRole.NISIT_DEV,
 	BOARD: ApprovalRole.BOARD,
-	BOARD_HEAD: ApprovalRole.BOARD_HEAD,
 	CHANCELLOR: ApprovalRole.CHANCELLOR
 };
 
@@ -42,7 +39,6 @@ export enum UserRole {
 	DEAN = 'คณบดี',
 	NISIT_DEV = 'กองพัฒนานิสิต',
 	BOARD = 'คณะกรรมการ',
-	BOARD_HEAD = 'ประธานคณะกรรมการ',
 	CHANCELLOR = 'อธิการบดี'
 }
 export const roleMapUserRole: Record<string, UserRole> = {
@@ -52,6 +48,5 @@ export const roleMapUserRole: Record<string, UserRole> = {
 	DEAN: UserRole.DEAN,
 	NISIT_DEV: UserRole.NISIT_DEV,
 	BOARD: UserRole.BOARD,
-	BOARD_HEAD: UserRole.BOARD_HEAD,
 	CHANCELLOR: UserRole.CHANCELLOR
 };

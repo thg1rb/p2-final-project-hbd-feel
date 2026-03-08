@@ -17,7 +17,6 @@
 		ApprovalRole.DEAN,
 		ApprovalRole.NISIT_DEV,
 		ApprovalRole.BOARD,
-		ApprovalRole.BOARD_HEAD,
 		ApprovalRole.CHANCELLOR
 	];
 

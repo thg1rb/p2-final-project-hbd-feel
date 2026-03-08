@@ -232,9 +232,9 @@
 				</div>
 			{/if}
 
-			<ApplicationStat stats={data.stats} />
+			<!-- <ApplicationStat stats={data.stats} /> -->
 
-			<RequestTable
+			<!-- <RequestTable
 				needFilter={true}
 				user={data.user}
 				applications={data.applications}
@@ -244,7 +244,7 @@
 				statusFilter={data.status || ''}
 				currentPage={data.currentPage || 1}
 				totalPages={data.totalPages || 1}
-			/>
+			/> -->
 		</div>
 	{:else}
 		<div class="flex flex-col items-center gap-8 rounded-xl bg-white p-15 shadow-md">

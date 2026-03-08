@@ -31,7 +31,7 @@
 				desc = 'จัดการรายละเอียดนิสิตดีเด่นภายในคณะ, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
 				currentLevel = 3;
 				break;
-			case UserRole.ADMIN:
+			case UserRole.NISIT_DEV:
 				desc = 'จัดการรายละเอียดนิสิตดีเด่น, ดูสถานะ และพิจารณาเห็นชอบหรือไม่เห็นชอบ';
 				currentLevel = 4;
 				break;

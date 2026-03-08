@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
-	import { ApprovalRole, ApprovalStatus, roleMap } from '$lib/enums';
+	import { ApprovalRole, ApprovalStatus, roleMapApprovalRole } from '$lib/enums';
 	import type { Approval } from '$lib/type';
 	import { formatThaiDate } from '$lib/utils/dateFormatter';
 	import StatusBox from './StatusBox.svelte';
@@ -15,14 +15,13 @@
 		ApprovalRole.DEPT_HEAD,
 		ApprovalRole.ASSO_DEAN,
 		ApprovalRole.DEAN,
-		ApprovalRole.ADMIN,
+		ApprovalRole.NISIT_DEV,
 		ApprovalRole.BOARD,
-		ApprovalRole.BOARD_HEAD,
 		ApprovalRole.CHANCELLOR
 	];
 
 	const getApprovalData = (role: ApprovalRole): Approval | null => {
-		const approval = approvals.find((a) => roleMap[a.user.role] === role);
+		const approval = approvals.find((a) => roleMapApprovalRole[a.user.role] === role);
 		if (approval === undefined) {
 			return null;
 		}

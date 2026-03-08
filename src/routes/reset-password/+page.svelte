@@ -1,68 +1,46 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
     import type { SubmitFunction } from '@sveltejs/kit';
-	import { onMount } from 'svelte';
 	import type { ActionData } from './$types';
+	import { toastStack } from '$lib/stores/toast.svelte';
+    import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
     let { form }: { form: ActionData } = $props();
 
     let isLoading = $state(false);
 
-    const handleLogin: SubmitFunction = () => {
+    const handleSubmit: SubmitFunction = () => {
         isLoading = true;
         
-        return async ({ update }) => {
+        return async ({ update, result }) => {
             await update(); 
             isLoading = false; 
+
+            if (result.type === "success") {
+                toastStack.add("รีเซ็ตรหัสผ่านสำเร็จ!")
+                goto("/login");
+            }
         };
     };
 
-    let forced = $state(false);
-
-    onMount(() => {
-
-		if (window.location.hash === '#forced') {
-			forced = true;
-		}
-	});
-
 </script>
 
-<div class="fixed inset-x-0 top-22 bottom-0 bg-gray-50 flex flex-col gap-5 justify-center items-center">
+<div class="flex flex-col h-screen w-full bg-gray-50 flex flex-col gap-5 justify-center items-center">
     <div class="text-2xl flex flex-col justify-center items-center">
-        {#if forced}
-            <p class="text-2xl">ยินดีตอนรับสู่<span class="text-green-600">ระบบนิสิตดีเด่น!</span></p>
-            <p class="text-lg">โปรดเปลี่ยนรหัสผ่านในการเข้าใช้งานครั้งแรก</p>
-        {:else}
-            <p class="text-2xl">เปลี่ยน<span class="text-green-600">รหัสผ่าน</span></p>
-            <p class="text-lg">โปรดกรอกข้อมูลด้านล่างให้ถูกต้องและครบถ้วน</p>
-        {/if}
+ 
+            <p class="text-2xl">รีเซ็ต<span class="text-green-600">รหัสผ่าน</span></p>
+            <p class="text-lg">โปรดกรอกรหัสผ่านใหม่ของท่านด้านล่าง</p>
+
     </div>
     <div class="rounded-2xl shadow-lg bg-white px-20 py-10 flex flex-col gap-3 justify-center items-center">
         <!-- <p class="text-2xl mb-5">เข้าสู่ระบบ</p> -->
         <!-- <p>Login</p> -->
 
-        <form action="?/change_password" method="POST" use:enhance={handleLogin} class="space-y-4">
-        {#if !forced}    
-            <div>
-                <label for="old-password" class="block mb-2">
-                    รหัสผ่านปัจจุบัน
-                </label>
-                <input 
-                    type="password" 
-                    class="rounded-4xl w-80" 
-                    name="old-password"
-                    id="old-password"
-                    disabled={isLoading}
-                    required
-                >
-                {#if form?.errors?.current_password}
-                    <p class="text-red-500 text-sm mt-1">
-                        {form.errors.current_password[0]}
-                    </p>
-                {/if}
-            </div>
-        {/if}
+        <form action="?/reset_password" method="POST" use:enhance={handleSubmit} class="space-y-4">
+
+            <input type="hidden" name="token" value={$page.url.searchParams.get('token')} />
+            <input type="hidden" name="email" value={$page.url.searchParams.get('email')} />
 
             <div>
                 <label for="password" class="block mb-2">
@@ -102,11 +80,17 @@
                 {/if}
             </div>
             
+            {#if form?.message}
+                <div class="text-red-500">
+                    {form.message}
+                </div>
+            {/if}
+            
             <div class="w-full flex justify-center">
                 <button class="mt-5 rounded-2xl border py-2 text-white hover:cursor-pointer hover:scale-110 bg-blue-400 w-40"
                     disabled={isLoading}
                 >
-                    เปลี่ยนรหัสผ่าน
+                    รีเซ็ตรหัสผ่าน
                 </button>
             </div>
 

@@ -120,7 +120,7 @@
 			</div>
 			<p class=" text-gray-400">ยื่นเมื่อ {formatThaiDate(application?.created_at)}</p>
 		</div>
-		<div class=" mt-7 flex gap-6">
+		<div class=" mt-7 flex flex-col lg:flex-row gap-6">
 			<div class="flex flex-2 flex-col gap-6">
 				<NisitInfo {application} />
 				<ApplicationComponent {application} />

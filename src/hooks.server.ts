@@ -1,85 +1,77 @@
 import { redirect, type Handle } from '@sveltejs/kit';
 
-// Define route access configuration
+// Public routes
 const PUBLIC_ROUTES = ['/login', '/forgot-password', '/reset-password', '/oauth', '/logout'];
 
-const NISIT_ONLY_ROUTES = ['/my-awards', '/award-application'];
-const ADMIN_ROUTES = ['/application-list'];
-
+// Routes accessible to any authenticated user
 const AUTHENTICATED_ROUTES = ['/profile', '/change-password'];
 
-// Helper function to check if a path matches any of the given route patterns
-function matchesRoute(path: string, routes: string[]): boolean {
-	for (const route of routes) {
-		if (route.endsWith('*')) {
-			const prefix = route.slice(0, -1);
-			if (path === prefix || path.startsWith(prefix)) {
-				return true;
-			}
-		} else if (path === route || path.startsWith(route + '/')) {
-			return true;
-		}
+// Role-based access control
+const ROUTE_PERMISSIONS: Record<string, string[]> = {
+	'/my-awards': ['NISIT'],
+	'/award-application': ['NISIT'],
+
+	'/application-list': ['DEPT_HEAD', 'ASSO_DEAN', 'DEAN', 'BOARD'],
+	'/application-list/*': ['NISIT', 'DEPT_HEAD', 'ASSO_DEAN', 'DEAN', 'BOARD']
+};
+
+// Match route helper
+function matchRoute(path: string, route: string): boolean {
+	if (route.endsWith('*')) {
+		const prefix = route.slice(0, -1);
+		return path === prefix || path.startsWith(prefix);
 	}
-	return false;
+
+	return path === route || path.startsWith(route + '/');
 }
 
-// Helper function to check if a path exists in our route configuration
-function isRouteExists(path: string): boolean {
-	return (
-		matchesRoute(path, PUBLIC_ROUTES) ||
-		matchesRoute(path, NISIT_ONLY_ROUTES) ||
-		matchesRoute(path, ADMIN_ROUTES) ||
-		matchesRoute(path, AUTHENTICATED_ROUTES) ||
-		path.startsWith('/api/') // API routes are handled separately
-	);
+// Check if route exists
+function routeExists(path: string): boolean {
+	if (PUBLIC_ROUTES.some((r) => matchRoute(path, r))) return true;
+	if (AUTHENTICATED_ROUTES.some((r) => matchRoute(path, r))) return true;
+	if (Object.keys(ROUTE_PERMISSIONS).some((r) => matchRoute(path, r))) return true;
+
+	return path.startsWith('/api/');
 }
 
-// Get the default path for a given role
-function getDefaultPathForRole(role: string | null): string {
-	if (!role) {
-		return '/login';
-	}
+// Default page per role
+function getDefaultPath(role: string | null): string {
+	if (!role) return '/login';
+
 	switch (role) {
 		case 'NISIT':
 			return '/my-awards';
+
 		case 'DEPT_HEAD':
 		case 'ASSO_DEAN':
 		case 'DEAN':
 		case 'BOARD':
 			return '/application-list';
-		case 'NISIT_DEV':
-			// NISIT_DEV redirect handled externally - no default redirect
-			return '/login';
+
 		default:
 			return '/login';
 	}
 }
 
-// Check if the user's role allows access to the route
-function canAccessRoute(path: string, role: string | null): boolean {
-	// Public routes are accessible to everyone
-	if (matchesRoute(path, PUBLIC_ROUTES)) {
+// Check permission
+function hasPermission(path: string, role: string | null): boolean {
+	// Public
+	if (PUBLIC_ROUTES.some((r) => matchRoute(path, r))) {
 		return true;
 	}
 
-	// Authenticated routes require any authenticated user
-	if (matchesRoute(path, AUTHENTICATED_ROUTES)) {
+	// Authenticated
+	if (AUTHENTICATED_ROUTES.some((r) => matchRoute(path, r))) {
 		return role !== null;
 	}
 
-	// NISIT-only routes
-	if (matchesRoute(path, NISIT_ONLY_ROUTES)) {
-		return role === 'NISIT';
-	}
+	// Sort routes so wildcard routes are checked first
+	const sortedRoutes = Object.entries(ROUTE_PERMISSIONS).sort((a, b) => b[0].length - a[0].length);
 
-	// Admin/approval routes
-	if (matchesRoute(path, ADMIN_ROUTES)) {
-		return (
-			role === 'DEPT_HEAD' ||
-			role === 'ASSO_DEAN' ||
-			role === 'DEAN' ||
-			role === 'BOARD'
-		);
+	for (const [route, roles] of sortedRoutes) {
+		if (matchRoute(path, route)) {
+			return role !== null && roles.includes(role);
+		}
 	}
 
 	return false;
@@ -91,56 +83,50 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.user = null;
 
-	let userRole: string | null = null;
+	let role: string | null = null;
 
 	if (token && userInfoCookie) {
 		try {
-			const jsonString = Buffer.from(userInfoCookie, 'base64').toString('utf-8');
-			event.locals.user = JSON.parse(jsonString);
-			if (event.locals.user) {
-				userRole = event.locals.user.role;
+			const json = Buffer.from(userInfoCookie, 'base64').toString('utf-8');
+			event.locals.user = JSON.parse(json);
 
-				// Force password change check
+			if (event.locals.user) {
+				role = event.locals.user.role;
+
+				// Force password change
 				if (
 					event.locals.user.force_password_change &&
-					(event.url.pathname !== '/change-password' && event.url.pathname !== '/logout')
+					event.url.pathname !== '/change-password' &&
+					event.url.pathname !== '/logout'
 				) {
 					throw redirect(303, '/change-password#forced');
 				}
 			}
-		} catch (err: unknown) {
-			if ((err as any).status === 303) throw err;
+		} catch (err: any) {
+			if (err.status === 303) throw err;
+
 			event.cookies.delete('token', { path: '/' });
 			event.cookies.delete('user_info', { path: '/' });
-			userRole = null;
+
+			role = null;
 		}
 	}
 
-	// Route access check
-	const pathname = event.url.pathname;
+	const path = event.url.pathname;
 
-	// Redirect root path to appropriate default
-	if (pathname === '/') {
-		const defaultPath = getDefaultPathForRole(userRole);
-		throw redirect(303, defaultPath);
+	// root redirect
+	if (path === '/') {
+		throw redirect(303, getDefaultPath(role));
 	}
 
-	// Check if route exists
-	if (!isRouteExists(pathname)) {
-		// Route doesn't exist - redirect to appropriate default
-		const defaultPath = getDefaultPathForRole(userRole);
-		if (pathname !== defaultPath) {
-			throw redirect(303, defaultPath);
-		}
+	// unknown route
+	if (!routeExists(path)) {
+		throw redirect(303, getDefaultPath(role));
 	}
 
-	// Check role-based access
-	if (!canAccessRoute(pathname, userRole)) {
-		// User doesn't have access - redirect to appropriate default
-		const defaultPath = getDefaultPathForRole(userRole);
-		if (pathname !== defaultPath) {
-			throw redirect(303, defaultPath);
-		}
+	// permission check
+	if (!hasPermission(path, role)) {
+		throw redirect(303, getDefaultPath(role));
 	}
 
 	return resolve(event);

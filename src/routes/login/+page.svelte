@@ -31,7 +31,7 @@
 <div class="min-h-screen bg-white flex items-center justify-center p-4">
     <div class="w-full max-w-md">
         <!-- Header -->
-        <div class="text-center mb-8">
+        <div class="text-center">
             <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg mb-4">
                 <Icon name="award" class="text-white" size={32} />
             </div>
@@ -39,6 +39,7 @@
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">ระบบนิสิตดีเด่น</span>
             </h1>
             <p class="text-gray-600">โปรดเข้าสู่ระบบเพื่อสมัครหรือพิจารณานิสิตดีเด่น</p>
+            <a href="/award-result" class="text-green-600 underline">หรือคลิกเพื่อดูรายชื่อนิสิตดีเด่น</a>
         </div>
 
         <!-- Login Card -->

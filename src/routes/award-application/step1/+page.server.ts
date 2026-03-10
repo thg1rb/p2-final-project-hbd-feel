@@ -1,9 +1,15 @@
 import type { PageServerLoad } from './$types';
 import { apiClient } from '$lib/api';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ cookies }) => {
 	try {
-		const res = await apiClient.get('/awards');
+		const token = cookies.get('token');
+
+		const res = await apiClient.get('/awards', {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		});
 
 		return {
 			awards: res.data

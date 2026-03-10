@@ -34,29 +34,62 @@
 	<nav class="fixed top-0 right-0 left-0 z-50 border-b border-gray-100 bg-white shadow-sm">
 		<!-- Main bar -->
 		<div class="mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="flex h-[73px] items-center justify-between">
+<div class="flex h-[73px] items-center justify-between">
 
-				<!-- Logo / Brand -->
-				<a
-					href={user.role === 'NISIT' ? '/my-awards' : '/application-list'}
-					class="flex items-center gap-3"
-				>
-					<div class="flex items-center justify-center rounded-xl bg-primary p-3">
-						<Icon name="badge" size={24} class="stroke-white" />
-					</div>
-					<div class="font-thai flex flex-col gap-0.5">
-						<p class="font-bold leading-tight">นิสิตดีเด่น</p>
-						<p class="text-sm leading-tight text-gray-500">มหาวิทยาลัยเกษตรศาสตร์</p>
-					</div>
-				</a>
+	<!-- LEFT SIDE -->
+	<div class="flex items-center gap-6">
 
-				<!-- Desktop: Role badge + Auth Dropdown -->
-				<div class="hidden sm:flex sm:items-center sm:gap-3">
-					<span class="rounded-full bg-[#2e3336] px-4 py-2 text-sm text-white">
-						{user.role}
-					</span>
-					<AuthDropDown />
-				</div>
+		<!-- Logo -->
+		<a
+			href={user.role === 'NISIT' ? '/my-awards' : '/application-list'}
+			class="flex items-center gap-3"
+		>
+			<div class="flex items-center justify-center rounded-xl bg-primary p-3">
+				<Icon name="badge" size={24} class="stroke-white" />
+			</div>
+
+			<div class="font-thai flex flex-col gap-0.5">
+				<p class="font-bold leading-tight">นิสิตดีเด่น</p>
+				<p class="text-sm leading-tight text-gray-500">มหาวิทยาลัยเกษตรศาสตร์</p>
+			</div>
+		</a>
+
+		<!-- Desktop nav -->
+		<div class="hidden sm:flex items-center gap-2">
+
+			<a
+				href={user.role === 'NISIT' ? '/my-awards' : '/application-list'}
+				class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition
+				{$page.url.pathname === (user.role === 'NISIT' ? '/my-awards' : '/application-list')
+					? 'text-green-600 bg-green-50'
+					: 'text-gray-700 hover:bg-gray-100'}"
+			>
+				<Icon name="badge" size={18} class="stroke-current" />
+				{user.role === 'NISIT' ? 'รางวัลของฉัน' : 'รายการสมัคร'}
+			</a>
+
+			<a
+				href="/award-result"
+				class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition
+				{$page.url.pathname.startsWith('/award-result')
+					? 'text-green-600 bg-green-50'
+					: 'text-gray-700 hover:bg-gray-100'}"
+			>
+				<Icon name="trophy" size={18} class="stroke-current" />
+				ผลรางวัล
+			</a>
+
+		</div>
+
+	</div>
+
+	<!-- RIGHT SIDE -->
+	<div class="hidden sm:flex sm:items-center sm:gap-3">
+		<span class="rounded-full bg-[#2e3336] px-4 py-2 text-sm text-white">
+			{user.role}
+		</span>
+		<AuthDropDown />
+	</div>
 
 				<!-- Mobile: Hamburger button -->
 				<button
@@ -104,6 +137,15 @@
 					>
 						<Icon name="badge" size={18} class="stroke-gray-500" />
 						{user.role === 'NISIT' ? 'รางวัลของฉัน' : 'รายการสมัคร'}
+					</a>
+
+					<a
+						href="/award-result"
+						onclick={closeMobileMenu}
+						class="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-gray-900"
+					>
+						<Icon name="trophy" size={18} class="stroke-gray-500" />
+						ผลรางวัลนิสิตดีเด่น
 					</a>
 
 					<a

@@ -39,7 +39,7 @@
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">ระบบนิสิตดีเด่น</span>
             </h1>
             <p class="text-gray-600">โปรดเข้าสู่ระบบเพื่อสมัครหรือพิจารณานิสิตดีเด่น</p>
-            <a href="/award-result" class="text-green-600 underline">หรือคลิกเพื่อดูรายชื่อนิสิตดีเด่น</a>
+            <a href="/award-result" class="text-green-600 underline" target="_blank">หรือคลิกเพื่อดูรายชื่อนิสิตที่ได้รับรางวัล</a>
         </div>
 
         <!-- Login Card -->

@@ -9,6 +9,7 @@ declare global {
 				email: string;
 				role: string;
 				student_id: number;
+				force_password_change: boolean
 			} | null; 
 		}
 		// interface PageData {}

@@ -125,7 +125,7 @@
                                                 </span>
                                             </h4>
                                             <p class="text-gray-400 text-sm">
-                                                {reg.semester}/{reg.academic_year} • สมัครเมื่อ {reg.created_at ? formatThaiDate(reg.created_at) : "XXXX" } • แก้ไขล่าสุด {reg.updated_at ? formatThaiDate(reg.created_at) : "XXXX" }
+                                                {reg.semester}/{reg.academic_year} • สมัครเมื่อ {reg.created_at ? formatThaiDate(reg.created_at) : "XXXX" }
                                             </p>
                                         </div>
                                     </div>

@@ -51,11 +51,13 @@
         <div class="flex flex-col gap-2 w-2/3">
             <div class="flex justify-between">
                 <p class="text-3xl font-bold">สวัสดี, {student?.firstName} {student?.lastName}</p>
-                <a href="/award-application/step1">
-                    <div class="flex bg-[#226e64] text-md text-white items-center justify-center p-2 px-5 rounded-2xl gap-2 cursor-pointer">
-                        <Icon name="plus" currentColor="white" size={24}/> สมัครนิสิตดีเด่น
-                    </div>
-                </a>
+                {#if curr}
+                    <a href="/award-application/step1">
+                        <div class="flex bg-[#226e64] text-md text-white items-center justify-center p-2 px-5 rounded-2xl gap-2 cursor-pointer">
+                            <Icon name="plus" currentColor="white" size={24}/> สมัครนิสิตดีเด่น
+                        </div>
+                    </a>
+                {/if}
             </div>
             <p class="text-sm text-gray-600">
                 รหัสนิสิต: {student?.student_id} | คณะ{student?.faculty?.name} | ภาควิชา{student?.department?.name}
@@ -69,8 +71,9 @@
             <CountBox title="ไม่ผ่านการพิจารณา" amount={stats?.rejected} textColor="red" iconPrimary="#ef4444" iconSecondary="#fef2f2" icon="trash-2"/>
         </div>
 
+        {#if curr}
         <div class="w-2/3">
-            <div class="bg-[#2d6a4f] rounded-2xl p-6 text-white flex justify-between items-center shadow-md">
+            <div class="bg-[#2d6a4f] rounded-2xl p-6 text-white flex justify-between items-center shadow-md">                    
                 <div class="flex items-center gap-5">
                     <div class="bg-white/20 p-4 rounded-xl">
                         <Icon name="calendar" size={35} currentColor="white"/>
@@ -83,20 +86,29 @@
                     </div>
                 </div>
                 <div class="text-right">
+                {#if new Date(curr.end_date) > new Date()}
                     <span class="bg-[#f39c12] text-white px-4 py-1 rounded-full text-sm font-bold">เปิดรับสมัคร</span>
                     <p class="mt-2 text-sm font-light">
                         หมดเขต: { curr?.end_date ? formatThaiDate(curr.end_date) : '-' }
                     </p>
+                {:else}
+                    <span class="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold">ปิดรับสมัคร</span>
+                    <p class="mt-2 text-sm font-light">
+                        หมดเขตเมื่อ: { curr?.end_date ? formatThaiDate(curr.end_date) : '-' }
+                    </p>
+                {/if}
                 </div>
             </div>
         </div>
+        {/if}
+
 
         <div class="w-2/3">
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
                     <Icon name="home" size={28} currentColor="green"/>
                     <h2 class="text-xl font-bold text-gray-800">
-                        ประวัติการสมัคร {availableStatus.APPROVED.text}
+                        ประวัติการสมัคร
                     </h2>
                 </div>
                 <p class="text-sm text-gray-500 -mt-2">

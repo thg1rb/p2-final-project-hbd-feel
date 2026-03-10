@@ -2,14 +2,20 @@ import type { Actions, PageServerLoad } from './$types';
 import { redirect, fail } from '@sveltejs/kit';
 import { apiClient } from '$lib/api';
 
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async ({ url, cookies }) => {
 	const awardId = url.searchParams.get('award_id');
 
 	if (!awardId) {
 		throw redirect(302, '/award-application/step1');
 	}
 
-	const res = await apiClient.get(`/awards/${awardId}`);
+	const token = cookies.get('token');
+
+	const res = await apiClient.get(`/awards/${awardId}`, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	});
 
 	return {
 		award: res.data

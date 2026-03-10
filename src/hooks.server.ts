@@ -1,7 +1,7 @@
 import { redirect, type Handle } from '@sveltejs/kit';
 
 // Public routes
-const PUBLIC_ROUTES = ['/login', '/forgot-password', '/reset-password', '/oauth', '/logout'];
+const PUBLIC_ROUTES = ['/login', '/forgot-password', '/reset-password', '/oauth', '/logout', '/award-result'];
 
 // Routes accessible to any authenticated user
 const AUTHENTICATED_ROUTES = ['/profile', '/change-password'];

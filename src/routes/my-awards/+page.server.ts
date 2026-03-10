@@ -21,12 +21,14 @@ export const load: PageServerLoad = async ({ locals }) => {
         if (response.data.data.applications) {
             let regs = response.data.data.applications;
             for (const reg of regs) {
+                // console.log(reg.status, " ", reg.level)
                 all++;
                 if (reg.status === "APPROVED" && reg.level === 5) approved++;
-                if (reg.status === "REJECTED") rejected++;
+                else if (reg.status === "REJECTED") rejected++;
                 else pending++;
             }
         }
+        // console.log(pending)
         return {
             regs: response.data.data.applications,
             stats: {

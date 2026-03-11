@@ -34,7 +34,7 @@
     };
 </script>
 
-<div class="min-h-screen bg-white flex items-center justify-center p-4 py-20">
+<div class="min-h-screen bg-white fixed inset-x-0 top-0 bottom-0 flex items-center justify-center p-4 py-20">
     <div class="w-full max-w-md">
         <!-- Header -->
         <div class="text-center mb-8">

@@ -106,7 +106,7 @@ jobs:
             echo "APP_HOST=frontend-test.k8s.dev" >> $GITHUB_ENV
             echo "K8S_NAMESPACE=test" >> $GITHUB_ENV
           elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
-            echo "APP_HOST=frontend-uat.k8s.dev" >> $GITHUB_ENV
+            echo "APP_HOST=frontend.uat.k8s.dev" >> $GITHUB_ENV
             echo "K8S_NAMESPACE=uat" >> $GITHUB_ENV
           fi
 

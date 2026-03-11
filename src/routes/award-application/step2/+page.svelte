@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { enhance } from '$app/forms';
+	import { PUBLIC_BROWSER_API_BASE_URL } from '$env/static/public';
 
 	const { data }: PageProps = $props();
 
 	const award = $derived(data.award);
 	const requirements = $derived(data.award?.requirements ?? []);
+	const pdfPath = $derived(data.award?.form_path);
 
 	let selectedFile = $state<File | null>(null);
 	let requirementFiles = $state<Record<string, File | null>>({});
@@ -160,10 +162,36 @@
 </div>
 	<div class="space-y-8">
 		<div>
-			<p class="block text-sm font-medium text-gray-700 mb-2">
-				อัปโหลดไฟล์สมัคร <span class="text-red-500">*</span>
-			</p>
+			<div class="flex items-center justify-between mb-2">
+				<p class="block text-sm font-medium text-gray-700">
+					อัปโหลดไฟล์สมัคร <span class="text-red-500">*</span>
+				</p>
 
+				{#if pdfPath}
+					<a
+						href={`${PUBLIC_BROWSER_API_BASE_URL}/minio/download-pdf?path=${encodeURIComponent(pdfPath)}`}
+						class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm transition font-medium"
+						download
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-5 h-5"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M12 3v12m0 0l4-4m-4 4l-4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"
+							/>
+						</svg>
+
+						ดาวน์โหลดใบสมัคร
+					</a>
+				{/if}
+			</div>
 			<label
 				for="documents"
 				class="flex flex-col items-center justify-center gap-2 w-full h-48 cursor-pointer rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-gray-600 hover:border-emerald-500 hover:bg-emerald-50 transition"

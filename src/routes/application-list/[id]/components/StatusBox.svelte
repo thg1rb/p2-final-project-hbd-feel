@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
-	import { ApprovalStatus } from '$lib/enums';
+	import { ApprovalRole, ApprovalStatus } from '$lib/enums';
 
 	interface Props {
 		status: ApprovalStatus;
@@ -10,6 +10,7 @@
 		agree?: boolean;
 		reason?: string;
 		last?: boolean;
+		isClosed?: boolean;
 	}
 
 	let {
@@ -19,16 +20,17 @@
 		time = '',
 		agree = false,
 		reason = '',
-		last = false
+		last = false,
+		isClosed = false,
 	}: Props = $props();
 
 	let borderColor = $derived.by(() => {
 		if (status === ApprovalStatus.NOT_STARTED) {
 			return 'border-gray-200';
+		} else if (status === ApprovalStatus.APPROVED || (role === ApprovalRole.CHANCELLOR && isClosed)) {
+			return 'border-primary';
 		} else if (status === ApprovalStatus.PENDING) {
 			return 'border-amber-500';
-		} else if (status === ApprovalStatus.APPROVED) {
-			return 'border-primary';
 		} else if (status === ApprovalStatus.REJECT) {
 			return 'border-red-400';
 		}
@@ -36,10 +38,10 @@
 	let bgColor = $derived.by(() => {
 		if (status === ApprovalStatus.NOT_STARTED) {
 			return 'bg-gray-200';
+		} else if (status === ApprovalStatus.APPROVED || (role === ApprovalRole.CHANCELLOR && isClosed)) {
+			return 'bg-primary';
 		} else if (status === ApprovalStatus.PENDING) {
 			return 'bg-amber-500';
-		} else if (status === ApprovalStatus.APPROVED) {
-			return 'bg-primary';
 		} else if (status === ApprovalStatus.REJECT) {
 			return 'bg-red-400';
 		}
@@ -52,7 +54,7 @@
 			<div class="m-2 flex h-5 w-5 items-center justify-center rounded-full border-2 {borderColor}">
 				{#if status === ApprovalStatus.NOT_STARTED}
 					<Icon name="circle" class="fil-gray-200 stroke-0" size={10} />
-				{:else if status === ApprovalStatus.PENDING}
+				{:else if status === ApprovalStatus.PENDING && !isClosed}
 					<Icon name="loading" class="stroke-amber-500" size={10} />
 				{:else if status === ApprovalStatus.REJECT}
 					<Icon name="X" class="stroke-red-400" size={10} />
@@ -71,9 +73,12 @@
 		<p class="font-medium">{role}</p>
 		{#if status === ApprovalStatus.NOT_STARTED}
 			<p class="text-sm text-gray-400">ยังไม่ถึงขั้นตอนนี้</p>
-		{:else if status === ApprovalStatus.PENDING}
+		{:else if status === ApprovalStatus.PENDING && !isClosed}
 			<p class="text-sm text-amber-400">รอดำเนินการ</p>
 		{:else}
+		  {#if role === ApprovalRole.CHANCELLOR && isClosed}
+				<p class="text-sm text-gray-400">ดำเนินการลงนามใบสมัครนิสิตดีเด่นสำเร็จ</p>
+			{:else}
 			<p class="text-sm text-gray-400">{name} - {time}</p>
 			<div class="rounded-xl bg-gray-100 p-3">
 				{#if agree}
@@ -82,6 +87,7 @@
 					<p class="text-sm text-red-400">ไม่เห็นชอบ: {reason || 'ไม่ระบุเหตุผล'}</p>
 				{/if}
 			</div>
+			{/if}
 		{/if}
 	</div>
 </div>

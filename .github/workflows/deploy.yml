@@ -64,9 +64,23 @@ jobs:
   build-docker:
     needs: sonarqube-analyze
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
+
+      # 1. กำหนดค่าตัวแปรตาม Branch เพื่อใช้ส่งเข้า Docker Build
+      - name: Set Build Arguments
+        id: args
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "browser_api=${{ secrets.PROD_BROWSER_API }}" >> $GITHUB_OUTPUT
+            echo "docker_api=${{ secrets.PROD_DOCKER_API }}" >> $GITHUB_OUTPUT
+            echo "oauth_uri=${{ secrets.PROD_OAUTH_URI }}" >> $GITHUB_OUTPUT
+          else
+            # ค่าของ UAT หรือ feature branch
+            echo "browser_api=${{ secrets.UAT_BROWSER_API }}" >> $GITHUB_OUTPUT
+            echo "docker_api=${{ secrets.UAT_DOCKER_API }}" >> $GITHUB_OUTPUT
+            echo "oauth_uri=${{ secrets.UAT_OAUTH_URI }}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Login to Docker Hub
         if: github.event_name == 'push'
@@ -84,9 +98,11 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/myapp-frontend:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/myapp-frontend:latest
+
           build-args: |
-            PUBLIC_BROWSER_API_BASE_URL=${{ secrets.PUBLIC_BROWSER_API_BASE_URL }}
-            PUBLIC_DOCKER_API_BASE_URL=${{ secrets.PUBLIC_DOCKER_API_BASE_URL }}
+            PUBLIC_BROWSER_API_BASE_URL=${{ steps.args.outputs.browser_api }}
+            PUBLIC_DOCKER_API_BASE_URL=${{ steps.args.outputs.docker_api }}
+            PUBLIC_OAUTH_URI=${{ steps.args.outputs.oauth_uri }}
 
   deploy:
     needs: build-docker

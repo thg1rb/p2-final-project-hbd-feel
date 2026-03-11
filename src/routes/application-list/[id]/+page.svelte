@@ -13,6 +13,7 @@
 
 	const application = $derived(data.application);
 	const approvals = $derived(data.approvals);
+	const isClosed = $derived(data.isClosed);
 
 	const { currentLevel, previousLevel } = $derived.by(() => {
 		let currentLevel = RoleLevel['ASSO_DEAN'];
@@ -120,14 +121,14 @@
 			</div>
 			<p class=" text-gray-400">ยื่นเมื่อ {formatThaiDate(application?.created_at)}</p>
 		</div>
-		<div class=" mt-7 flex gap-6">
+		<div class=" mt-7 flex flex-col lg:flex-row gap-6">
 			<div class="flex flex-2 flex-col gap-6">
 				<NisitInfo {application} />
 				<ApplicationComponent {application} />
 				<DocumentSection {application} />
 			</div>
 			<div class={`flex flex-1 flex-col gap-6`}>
-				<Progression {approvals} />
+				<Progression {approvals} {isClosed} />
 				{#if application.level === previousLevel && role !== UserRole.NISIT}
 					<ApproveSection {form} />
 				{/if}

@@ -7,6 +7,7 @@ import type { Actions, PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
 	const id = params.id;
+	const token = cookies.get('token');
 	let user: UserFromToken = {
 		id: 0,
 		name: '',
@@ -45,10 +46,24 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 			throw redirect(303, '/');
 		}
 
+		let isClosed = false;
+
+		try {
+			const isClosedResponse = await apiClient.get(`/event/is-closed`, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			});
+			isClosed = isClosedResponse.data as boolean;
+		} catch {
+			isClosed = false;
+		}
+
 		return {
 			user: user,
 			application: application,
-			approvals: approvals
+			approvals: approvals,
+			isClosed: isClosed
 		};
 	} catch (err: any) {
 		toastStack.add('เกิดข้อผิดพลาด', 'error');

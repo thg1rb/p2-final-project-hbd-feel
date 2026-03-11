@@ -1,156 +1,225 @@
-<script>
+<script lang="ts">
 	import Icon from './Icon.svelte';
 	import { page } from '$app/stores';
 	import LogoutButton from './logout-button.svelte';
-	import { roleMapUserRole } from '$lib/enums';
 	import AuthDropDown from './AuthDropDown.svelte';
+	import { fade } from 'svelte/transition';
+
 	let user = $derived($page.data.user);
-	console.log(user);
+	let mobileMenuOpen = $state(false);
+
+	function toggleMenu() {
+		mobileMenuOpen = !mobileMenuOpen;
+	}
+
+	function closeMobileMenu() {
+		mobileMenuOpen = false;
+	}
 </script>
 
 {#if user}
-	<nav class="border-b border-gray-100 bg-white p-3 shadow-md">
-		<!-- Primary Navigation Menu -->
+	<!-- Spacer so page content isn't hidden behind the fixed nav -->
+	<div class="h-[73px]"></div>
+
+	<!-- Overlay backdrop -->
+	{#if mobileMenuOpen}
+		<div
+			transition:fade={{ duration: 200 }}
+			class="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm sm:hidden"
+			onclick={closeMobileMenu}
+			aria-hidden="true"
+		></div>
+	{/if}
+
+	<nav class="fixed top-0 right-0 left-0 z-50 border-b border-gray-100 bg-white shadow-sm">
+		<!-- Main bar -->
 		<div class="mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="flex h-16 items-center justify-between">
-				<a href={`${$page.data?.user?.role === "NISIT" ? "/my-awards" : ""}`}>
-					<div class="flex gap-3">
-						<!-- Logo -->
-						<!-- <div class="flex shrink-0 items-center">
-						<a> </a>
-					</div> -->
+<div class="flex h-[73px] items-center justify-between">
 
-						<div class=" flex items-center justify-center rounded-xl bg-primary p-3">
-							<Icon name="badge" size={24} class="stroke-white"></Icon>
-						</div>
+	<!-- LEFT SIDE -->
+	<div class="flex items-center gap-6">
 
-						<!-- Navigation Links -->
-						<!-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-						<x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-						
-						</x-nav-link>
-					</div> -->
+		<!-- Logo -->
+		<a
+			href={user.role === 'NISIT' ? '/my-awards' : '/application-list'}
+			class="flex items-center gap-3"
+		>
+			<div class="flex items-center justify-center rounded-xl bg-primary p-3">
+				<Icon name="badge" size={24} class="stroke-white" />
+			</div>
 
-						<div class="font-thai flex flex-col gap-1">
-							<p class=" font-bold">นิสิตดีเด่น</p>
-							<p class="text-sm">มหาวิทยาลัยเกษตรศาสตร์</p>
-						</div>
-						<!-- {#if $page.data?.user?.role == "NISIT"}
-							<a href="/my-awards" class="mx-10 flex justify-center items-center">
-								<div class=" p-3 rounded-full hover:text-blue-500 text-lg">
-									<p>รางวัลของฉัน</p>
-								</div>
-							</a>
-						{/if} -->
+			<div class="font-thai flex flex-col gap-0.5">
+				<p class="font-bold leading-tight">นิสิตดีเด่น</p>
+				<p class="text-sm leading-tight text-gray-500">มหาวิทยาลัยเกษตรศาสตร์</p>
+			</div>
+		</a>
 
-					</div>
-				</a>
+		<!-- Desktop nav -->
+		<div class="hidden sm:flex items-center gap-2">
 
-				<!-- Settings Dropdown -->
-				<div class="hidden sm:ms-6 sm:flex sm:items-center">
-					<div class="flex items-center justify-center gap-3">
-						<p class="rounded-full bg-[#2e3336] p-3 text-sm text-white">
-							{user.role}
-							<!-- @if (Auth::check() && Auth::user()->role === App\Enums\UserRole::ADMIN) ผู้ดูแลระบบ
-						@endif -->
-						</p>
-						<p class=""></p>
-					</div>
+			<a
+				href={user.role === 'NISIT' ? '/my-awards' : '/application-list'}
+				class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition
+				{$page.url.pathname === (user.role === 'NISIT' ? '/my-awards' : '/application-list')
+					? 'text-green-600 bg-green-50'
+					: 'text-gray-700 hover:bg-gray-100'}"
+			>
+				<Icon name="badge" size={18} class="stroke-current" />
+				{user.role === 'NISIT' ? 'รางวัลของฉัน' : 'รายการสมัคร'}
+			</a>
 
-					<!-- <x-dropdown align="right" width="48">
-					<x-slot name="trigger">
-						<button
-							class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm leading-4 font-medium text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-						>
-							<div class="ms-1">
-								<svg
-									class="h-4 w-4 fill-current"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-								>
-									<path
-										fill-rule="evenodd"
-										d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-										clip-rule="evenodd"
-									/>
-								</svg>
-							</div>
-						</button>
-					</x-slot>
+			<a
+				href="/award-result"
+				class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition
+				{$page.url.pathname.startsWith('/award-result')
+					? 'text-green-600 bg-green-50'
+					: 'text-gray-700 hover:bg-gray-100'}"
+			>
+				<Icon name="trophy" size={18} class="stroke-current" />
+				ผลรางวัล
+			</a>
 
-					<x-slot name="content">
-						<x-dropdown-link :href="route('profile.edit')"> </x-dropdown-link>
+		</div>
 
-						Authentication
-						<form method="POST">
-							@csrf
+	</div>
 
-							<x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                              
-                            </x-dropdown-link>
-						</form>
-					</x-slot>
-				</x-dropdown> -->
-					<!-- <LogoutButton /> -->
-					<AuthDropDown />
-				</div>
+	<!-- RIGHT SIDE -->
+	<div class="hidden sm:flex sm:items-center sm:gap-3">
+		<span class="rounded-full bg-[#2e3336] px-4 py-2 text-sm text-white">
+			{user.role}
+		</span>
+		<AuthDropDown />
+	</div>
 
-				<!-- Hamburger -->
-				<div class="-me-2 flex items-center sm:hidden">
-					<button
-						class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-					>
-						<svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-							<!-- <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" /> -->
-							<path
-								class="hidden"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M6 18L18 6M6 6l12 12"
-							/>
-						</svg>
-					</button>
-				</div>
+				<!-- Mobile: Hamburger button -->
+				<button
+					onclick={toggleMenu}
+					aria-label="Toggle menu"
+					aria-expanded={mobileMenuOpen}
+					class="relative flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 hover:text-gray-800 focus:outline-none sm:hidden"
+				>
+					<span class="hamburger" class:open={mobileMenuOpen}>
+						<span></span>
+						<span></span>
+						<span></span>
+					</span>
+				</button>
 			</div>
 		</div>
 
-		<!-- Responsive Navigation Menu -->
-		<div class="hidden sm:hidden">
-			<div class="space-y-1 pt-2 pb-3">
-				<x-responsive-nav-link :href="route('main')" :active="request()->routeIs('main')">
-					<!-- {{ __('Dashboard') }} -->
-				</x-responsive-nav-link>
-			</div>
+		<!-- Mobile Sliding Menu -->
+		<div
+			class="mobile-menu overflow-hidden border-t border-gray-100 sm:hidden"
+			style:max-height={mobileMenuOpen ? '480px' : '0px'}
+			style:opacity={mobileMenuOpen ? '1' : '0'}
+		>
+			<div class="bg-white px-4 pt-4 pb-6 space-y-4">
 
-			<!-- Responsive Settings Options -->
-			<div class="border-t border-gray-200 pt-4 pb-1">
-				<div class="px-4">
-					<!-- {{-- <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div> --}} -->
+				<!-- User card -->
+				<div class="flex items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3">
+					<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2e3336] text-base">
+						👤
+					</div>
+					<div class="min-w-0">
+						<p class="truncate text-sm font-semibold text-gray-800">{user.name ?? ''}</p>
+						<span class="inline-block rounded-full bg-[#2e3336] px-2 py-0.5 text-xs text-white">
+							{user.role}
+						</span>
+					</div>
 				</div>
 
-				<div class="mt-3 space-y-1">
-					<!-- <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link> -->
+				<!-- Nav links -->
+				<nav class="space-y-1">
+					<a
+						href={user.role === 'NISIT' ? '/my-awards' : '/application-list'}
+						onclick={closeMobileMenu}
+						class="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-gray-900"
+					>
+						<Icon name="badge" size={18} class="stroke-gray-500" />
+						{user.role === 'NISIT' ? 'รางวัลของฉัน' : 'รายการสมัคร'}
+					</a>
 
-					<!-- Authentication -->
-					<form method="POST">
-						@csrf
+					<a
+						href="/award-result"
+						onclick={closeMobileMenu}
+						class="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-gray-900"
+					>
+						<Icon name="trophy" size={18} class="stroke-gray-500" />
+						ผลรางวัลนิสิตดีเด่น
+					</a>
 
-						<!-- <x-responsive-nav-link :href="route('logout')"
-                        onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                      
-                    </x-responsive-nav-link> -->
-					</form>
+					<a
+						href="/profile"
+						onclick={closeMobileMenu}
+						class="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-gray-900"
+					>
+						<svg class="h-[18px] w-[18px] stroke-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+						</svg>
+						โปรไฟล์
+					</a>
+
+					<a
+						href="/change-password"
+						onclick={closeMobileMenu}
+						class="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-gray-900"
+					>
+						<svg class="h-[18px] w-[18px] stroke-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+						</svg>
+						เปลี่ยนรหัสผ่าน
+					</a>
+				</nav>
+
+				<!-- Divider -->
+				<div class="border-t border-gray-100"></div>
+
+				<!-- Logout -->
+				<div class="px-1" onclick={closeMobileMenu} role="presentation">
+					<LogoutButton />
 				</div>
 			</div>
 		</div>
 	</nav>
 {/if}
+
+<style>
+	/* Smooth slide animation */
+	.mobile-menu {
+		transition: max-height 0.3s ease, opacity 0.3s ease;
+		will-change: max-height, opacity;
+	}
+
+	/* Animated hamburger → X */
+	.hamburger {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 20px;
+		height: 20px;
+		gap: 4px;
+	}
+
+	.hamburger span {
+		display: block;
+		width: 20px;
+		height: 2px;
+		background-color: currentColor;
+		border-radius: 2px;
+		transition: transform 0.25s ease, opacity 0.2s ease, width 0.2s ease;
+		transform-origin: center;
+	}
+
+	/* Open state: morph into X */
+	.hamburger.open span:nth-child(1) {
+		transform: translateY(6px) rotate(45deg);
+	}
+	.hamburger.open span:nth-child(2) {
+		opacity: 0;
+		width: 0;
+	}
+	.hamburger.open span:nth-child(3) {
+		transform: translateY(-6px) rotate(-45deg);
+	}
+</style>

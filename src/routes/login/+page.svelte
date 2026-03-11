@@ -5,10 +5,9 @@
     import { onMount } from 'svelte';
     import { toastStack } from '$lib/stores/toast.svelte';
     import type { ActionData } from './$types';
-    import { PUBLIC_OAUTH_URI } from '$env/static/public';
 	import Icon from '$lib/components/Icon.svelte';
 
-    
+
     let { form }: { form: ActionData } = $props();
 
     let isLoading = $state(false);

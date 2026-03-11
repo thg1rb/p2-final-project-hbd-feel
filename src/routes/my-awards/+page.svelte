@@ -51,12 +51,16 @@
         <div class="flex flex-col gap-2 w-2/3">
             <div class="flex justify-between">
                 <p class="text-3xl font-bold">สวัสดี, {student?.firstName} {student?.lastName}</p>
-                {#if curr}
+                {#if new Date(curr.end_date) > new Date() && new Date(curr.start_date) < new Date()}
                     <a href="/award-application/step1">
                         <div class="flex bg-[#226e64] text-md text-white items-center justify-center p-2 px-5 rounded-2xl gap-2 cursor-pointer">
                             <Icon name="plus" currentColor="white" size={24}/> สมัครนิสิตดีเด่น
                         </div>
                     </a>
+                    {:else}
+                    <div class="flex bg-gray-500 text-md text-white items-center justify-center p-2 px-5 rounded-2xl gap-2 cursor-not-allowed">
+                        <Icon name="plus" currentColor="white" size={24}/> สมัครนิสิตดีเด่น
+                    </div>
                 {/if}
             </div>
             <p class="text-sm text-gray-600">
@@ -86,16 +90,22 @@
                     </div>
                 </div>
                 <div class="text-right">
-                {#if new Date(curr.end_date) > new Date()}
+                {#if new Date(curr.end_date) > new Date() && new Date(curr.start_date) < new Date()}
                     <span class="bg-[#f39c12] text-white px-4 py-1 rounded-full text-sm font-bold">เปิดรับสมัคร</span>
                     <p class="mt-2 text-sm font-light">
                         หมดเขต: { curr?.end_date ? formatThaiDate(curr.end_date) : '-' }
                     </p>
-                {:else}
+                {:else if new Date(curr.end_date) < new Date()}
                     <span class="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold">ปิดรับสมัคร</span>
                     <p class="mt-2 text-sm font-light">
                         หมดเขตเมื่อ: { curr?.end_date ? formatThaiDate(curr.end_date) : '-' }
                     </p>
+                    {:else if new Date(curr.start_date) > new Date()}
+                    <span class="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold">ปิดรับสมัคร</span>
+                    <p class="mt-2 text-sm font-light">
+                        เปิดรับสมัคร: { curr?.end_date ? formatThaiDate(curr.start_date) : '-' }
+                    </p>
+
                 {/if}
                 </div>
             </div>

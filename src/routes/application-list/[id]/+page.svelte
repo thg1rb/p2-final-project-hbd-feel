@@ -13,6 +13,7 @@
 
 	const application = $derived(data.application);
 	const approvals = $derived(data.approvals);
+	const isClosed = $derived(data.isClosed);
 
 	const { currentLevel, previousLevel } = $derived.by(() => {
 		let currentLevel = RoleLevel['ASSO_DEAN'];
@@ -127,7 +128,7 @@
 				<DocumentSection {application} />
 			</div>
 			<div class={`flex flex-1 flex-col gap-6`}>
-				<Progression {approvals} />
+				<Progression {approvals} {isClosed} />
 				{#if application.level === previousLevel && role !== UserRole.NISIT}
 					<ApproveSection {form} />
 				{/if}

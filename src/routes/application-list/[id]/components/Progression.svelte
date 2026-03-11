@@ -7,9 +7,10 @@
 
 	interface Props {
 		approvals: Approval[];
+		isClosed: boolean;
 	}
 
-	const { approvals }: Props = $props();
+	const { approvals, isClosed }: Props = $props();
 
 	const workflowOrder = [
 		ApprovalRole.DEPT_HEAD,
@@ -73,7 +74,7 @@
 	</div>
 	<div class="flex flex-col">
 		{#each displayWorkflows as item}
-			<StatusBox status={item.status} role={item.role} last={item.isLast} {...item.props} />
+			<StatusBox status={item.status} role={item.role} last={item.isLast} isClosed={isClosed} {...item.props} />
 		{/each}
 	</div>
 </div>

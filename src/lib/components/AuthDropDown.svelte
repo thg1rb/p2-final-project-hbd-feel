@@ -4,12 +4,20 @@
 	import { onDestroy, onMount } from 'svelte';
     import { page } from '$app/stores';
 
-	let open = false;
+	let open = $state(false);
 	let wrapper: HTMLDivElement;
 
 	function toggle() {
 		open = !open;
 	}
+
+	// let forced = $state(false);
+
+    // onMount(() => {
+    //     if (window.location.hash === '#forced') {
+    //         forced = true;
+    //     }
+    // });
 
 </script>
 
@@ -38,9 +46,8 @@
         >
             โปรไฟล์
         </a>
-        
         <a
-            href="/change-password"
+            href={`${window.location.hash === '#forced' ? "/change-password#forced" : "/change-password"}`}
             class="block px-4 py-2 text-sm hover:bg-gray-100 transition"
         >
             เปลี่ยนรหัสผ่าน

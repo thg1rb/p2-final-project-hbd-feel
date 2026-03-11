@@ -5,6 +5,7 @@
     import { onMount } from 'svelte';
     import { toastStack } from '$lib/stores/toast.svelte';
     import type { ActionData } from './$types';
+    import { PUBLIC_OAUTH_URI } from '$env/static/public';
 	import Icon from '$lib/components/Icon.svelte';
     import { PUBLIC_OAUTH_URI } from '$env/static/public';
 

@@ -227,7 +227,7 @@
 		{#if award && award.requirements && award.requirements.length > 0}
 			<div>
 				<h3 class="text-lg font-semibold mb-4">
-					เอกสารเพิ่มเติมสำหรับ {award.name}
+					เอกสารเพิ่มเติม
 				</h3>
 
 				{#each award.requirements as req (req.id)}

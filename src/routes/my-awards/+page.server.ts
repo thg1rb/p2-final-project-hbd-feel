@@ -43,6 +43,14 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
 			}
 		}
 
+		let alreadyApplied = false;
+
+		if (response.data.data.applications && response.data.data.current_event) {
+			const regs = response.data.data.applications;
+			const currentEventId = response.data.data.current_event.id;
+			alreadyApplied = regs.some((r: any) => r.event_id === currentEventId);
+		}
+
 		// console.log(pending)
 		return {
 			regs: response.data.data.applications,
@@ -54,7 +62,8 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
 			},
 			curr: response.data.data.current_event,
 			student: response.data.data.student,
-			isClosed: isClosed
+			isClosed: isClosed,
+			alreadyApplied
 		};
 	} catch (err) {
 		console.log(err);

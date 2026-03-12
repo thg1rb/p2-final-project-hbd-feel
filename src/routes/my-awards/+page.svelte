@@ -14,7 +14,7 @@
         }
     };
 
-    const { regs, stats, curr, student, isClosed } = data;
+    const { regs, stats, curr, student, isClosed, alreadyApplied } = data;
 
     let availableStatus : AvailableStatus = {
         APPROVED: {
@@ -49,6 +49,15 @@
         // Otherwise, it is still "กำลังดำเนินการ" (SUBMITTED/PENDING)
         return "SUBMITTED";
     }
+
+    function applyAward() {
+        if (alreadyApplied) {
+            alert("คุณได้สมัครรางวัลในรอบนี้แล้ว ไม่สามารถสมัครซ้ำได้");
+            return;
+        }
+
+        window.location.href = '/award-application/step1';
+    }
 </script>
 
 <div class="bg-[#f3f4f6] h-screen">
@@ -57,11 +66,11 @@
             <div class="flex justify-between">
                 <p class="text-3xl font-bold">สวัสดี, {student?.firstName} {student?.lastName}</p>
                 {#if curr && new Date(curr.end_date) > new Date() && new Date(curr.start_date) < new Date()}
-                    <a href="/award-application/step1">
+                    <div on:click={applyAward} class="cursor-pointer">
                         <div class="flex bg-[#226e64] text-md text-white items-center justify-center p-2 px-5 rounded-2xl gap-2 cursor-pointer">
                             <Icon name="plus" currentColor="white" size={24}/> สมัครนิสิตดีเด่น
                         </div>
-                    </a>
+                    </div>
                     {:else}
                     <div class="flex bg-gray-500 text-md text-white items-center justify-center p-2 px-5 rounded-2xl gap-2 cursor-not-allowed">
                         <Icon name="plus" currentColor="white" size={24}/> สมัครนิสิตดีเด่น

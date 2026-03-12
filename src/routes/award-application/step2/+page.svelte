@@ -78,7 +78,9 @@
 		let newErrors: Record<string, string> = { ...errors };
 
 		if (!selectedFile) {
-			newErrors.main = "กรุณาอัปโหลดไฟล์สมัคร";
+			if (!newErrors.main) {
+				newErrors.main = "กรุณาอัปโหลดไฟล์สมัคร";
+			}
 		}
 
 		if (award) {

@@ -5,10 +5,11 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 spec:
   ingressClassName: nginx
   rules:
-    - host: placeholder.k8s.dev
+    - host: svelte.k8s.dev
       http:
         paths:
           - path: /

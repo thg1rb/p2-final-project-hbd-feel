@@ -9,7 +9,7 @@
   import { ApprovalStatus, RoleLevel, UserRole } from '$lib/enums.js';
   import DocumentSection from './components/DocumentSection.svelte';
   import type { ActionData, PageData } from './$types';
-  
+
   let { data, form }: { data: PageData; form: ActionData } = $props();
 
   const application = $derived(data.application);
@@ -92,53 +92,39 @@
     <div class="flex flex-col gap-2">
       <div class="flex items-center justify-start gap-3">
         <p class="text-2xl font-bold">{application?.id}</p>
-        {#if role === UserRole.CHANCELLOR}
-          {#if application.level === 6}
-            <div
-              class="w-fit rounded-full border border-emerald-400 bg-emerald-50 px-3 py-1 text-sm text-emerald-400"
-            >
-              อนุมัติ
-            </div>
-          {:else}
-            <div
-              class=" rounded-full border border-amber-400 bg-amber-100 px-3 py-1 text-amber-400"
-            >
-              รอพิจารณา
-            </div>
-          {/if}
-        {:else if role !== UserRole.NISIT}
-          {#if application.status === ApprovalStatus.APPROVED && application.level === previousLevel}
-            <div
-              class=" rounded-full border border-amber-400 bg-amber-100 px-3 py-1 text-amber-400"
-            >
-              รอพิจารณา
-            </div>
-          {:else if application.status === ApprovalStatus.REJECTED && application.level === currentLevel}
-            <div class=" rounded-full border border-red-400 bg-red-100 px-3 py-1 text-red-400">
-              ปฏิเสธ
-            </div>
-          {:else}
-            <div
-              class="w-fit rounded-full border border-emerald-400 bg-emerald-50 px-3 py-1 text-sm text-emerald-400"
-            >
-              อนุมัติ
-            </div>
-          {/if}
-        {:else if application.status !== ApprovalStatus.REJECTED && application.level !== RoleLevel.BOARD}
-          <div class=" rounded-full border border-amber-400 bg-amber-100 px-3 py-1 text-amber-400">
-            รอพิจารณา
-          </div>
-        {:else if application.status === ApprovalStatus.REJECTED}
-          <div class=" rounded-full border border-red-400 bg-red-100 px-3 py-1 text-red-400">
-            ปฏิเสธ
-          </div>
-        {:else}
-          <div
-            class="w-fit rounded-full border border-emerald-400 bg-emerald-50 px-3 py-1 text-sm text-emerald-400"
-          >
-            อนุมัติ
-          </div>
-        {/if}
+        {#if role === UserRole.NISIT}
+				  {#if application.level === RoleLevel.BOARD && isClosed}
+						<div
+							class="w-fit rounded-full border border-emerald-400 bg-emerald-50 px-3 py-1 text-sm text-emerald-400"
+						>
+							อนุมัติ
+						</div>
+					{:else if application.status === ApprovalStatus.REJECTED}
+				  <div class=" rounded-full border border-red-400 bg-red-100 px-3 py-1 text-red-400">
+         			  ปฏิเสธ
+       			  </div>
+					{:else}
+					<div class=" rounded-full border border-orange-400 bg-orange-100 px-3 py-1 text-orange-400">
+					  กำลังดำเนินการ
+					</div>
+					{/if}
+				{:else}
+				  {#if application.level >= currentLevel && application.status === ApprovalStatus.APPROVED}
+					<div
+						class="w-fit rounded-full border border-emerald-400 bg-emerald-50 px-3 py-1 text-sm text-emerald-400"
+					>
+						อนุมัติ
+					</div>
+					{:else if application.level === currentLevel && application.status === ApprovalStatus.REJECTED}
+			    <div class=" rounded-full border border-red-400 bg-red-100 px-3 py-1 text-red-400">
+         			  ปฏิเสธ
+       			  </div>
+					{:else}
+				  <div class=" rounded-full border border-amber-400 bg-amber-100 px-3 py-1 text-amber-400">
+						รอพิจารณา
+					</div>
+					{/if}
+				{/if}
       </div>
       {#if data.isOwnApplication && data.isEditable}
         <div class="flex gap-2">

@@ -6,6 +6,8 @@
     import { toastStack } from '$lib/stores/toast.svelte';
     import type { ActionData } from './$types';
 	import Icon from '$lib/components/Icon.svelte';
+    import { PUBLIC_OAUTH_URI } from '$env/static/public';
+
 
     let { form }: { form: ActionData } = $props();
 
@@ -47,7 +49,7 @@
             <!-- Google Login Button -->
             <button
                 onclick={() => {
-                    window.location.href = 'http://localhost/auth/google/redirect?from=svelte';
+                    window.location.href = PUBLIC_OAUTH_URI;
                 }}
                 class="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-gray-700 font-medium hover:border-green-400 hover:bg-green-50 transition-all duration-200 hover:shadow-md group"
                 disabled={isLoading}

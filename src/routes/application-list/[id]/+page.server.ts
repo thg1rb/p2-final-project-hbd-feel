@@ -2,7 +2,7 @@ import { apiClient } from '$lib/api.js';
 import { roleMapUserRole, UserRole } from '$lib/enums.js';
 import { toastStack } from '$lib/stores/toast.svelte.js';
 import type { Application, Approval, UserFromToken } from '$lib/type.js';
-import { redirect } from '@sveltejs/kit';
+import { redirect, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
@@ -17,12 +17,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 	};
 
 	try {
-		const appResponse = await apiClient.get(`/application/${id}`);
-		const approvalResponse = await apiClient.get(`/approvals/${id}`);
-
-		const approvals = approvalResponse.data as Approval[];
-		const application = appResponse.data as Application;
-
 		const userToken = cookies.get('user_info');
 
 		if (userToken) {
@@ -36,15 +30,29 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 					role: roleMapUserRole[newUser['role']],
 					studentID: newUser['student_id']
 				};
-				// if (user.role === UserRole.NISIT) {
-				//   throw redirect(303, '/');
-				// }
 			} catch (e) {
 				throw redirect(303, '/');
 			}
 		} else {
 			throw redirect(303, '/');
 		}
+
+		const appResponse = await apiClient.get(`/application/${id}`);
+
+		if (!appResponse.data) {
+			return {
+				user,
+				application: undefined,
+				approvals: undefined,
+				isClosed: false,
+				isOwnApplication: false,
+				isEditable: false
+			};
+		}
+
+		const application = appResponse.data as Application;
+		const approvalResponse = await apiClient.get(`/approvals/${id}`);
+		const approvals = approvalResponse.data as Approval[];
 
 		let isClosed = false;
 
@@ -59,23 +67,40 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 			isClosed = false;
 		}
 
+		const isOwnApplication = application?.student_id === user.studentID;
+
+		let isEditable = false;
+		if (isOwnApplication && application?.event) {
+			const now = new Date();
+			const startDate = new Date(application.event.start_date);
+			const endDate = new Date(application.event.end_date);
+			isEditable = now >= startDate && now <= endDate;
+		}
+
 		return {
-			user: user,
-			application: application,
-			approvals: approvals,
-			isClosed: isClosed
+			user,
+			application,
+			approvals,
+			isClosed,
+			isOwnApplication,
+			isEditable
 		};
 	} catch (err: any) {
-		toastStack.add('เกิดข้อผิดพลาด', 'error');
+		console.error('Load error:', err);
 		return {
-			user: user,
-			error: 'ไม่สามารถดึงข้อมูลใบสมัครได้'
+			user,
+			application: undefined,
+			approvals: undefined,
+			isClosed: false,
+			isOwnApplication: false,
+			isEditable: false
 		};
 	}
 };
 
 export const actions: Actions = {
-	default: async ({ request, params, cookies }) => {
+	// Default action: handle approval submission
+	approve: async ({ request, params, cookies }) => {
 		const applicationId = params.id;
 
 		const formData = await request.formData();
@@ -110,5 +135,35 @@ export const actions: Actions = {
 				message: error.response?.data?.message || error.message || 'เกิดข้อผิดพลาดในการบันทึก'
 			};
 		}
-	}
+	},
+
+	delete: async ({ params, cookies }) => {
+    const token = cookies.get('token');
+    const applicationId = params.id;
+
+    try {
+      await apiClient.delete(`/application/${applicationId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+    } catch (error: any) {
+      console.error('Delete Action Error:', error);
+
+      if (error.response) {
+        return fail(error.response.status, {
+          success: false,
+          message: error.response.data?.message || 'ไม่สามารถลบใบสมัครได้'
+        });
+      }
+
+      return fail(500, {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์'
+      });
+    }
+
+    throw redirect(303, '/my-awards');
+  }
 };

@@ -42,7 +42,7 @@
 	};
 </script>
 
-<form method="POST" action="" use:enhance={handleSubmit}>
+<form method="POST" action="?/approve" use:enhance={handleSubmit}>
 	<div class="flex flex-col rounded-xl border border-gray-300 bg-white shadow-sm">
 		<div class="flex flex-col gap-1 border-b border-gray-300 p-5">
 			<p class="font-bold">พิจารณาคำขอ</p>

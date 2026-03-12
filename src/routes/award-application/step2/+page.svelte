@@ -74,35 +74,42 @@
 
 	function handleSubmit({ cancel }) {
 		isSubmitting = true;
-		errors = {};
+
+		let newErrors: Record<string, string> = { ...errors };
 
 		if (!selectedFile) {
-			errors = { ...errors, main: "กรุณาอัปโหลดไฟล์สมัคร" };
+			if (!newErrors.main) {
+				newErrors.main = "กรุณาอัปโหลดไฟล์สมัคร";
+			}
 		}
 
 		if (award) {
 			for (const req of award.requirements) {
 				if (req.required && !requirementFiles[req.id]) {
-					errors = {
-						...errors,
-						[req.id]: `กรุณาอัปโหลดไฟล์ ${req.name}`
-					};
+					if (!newErrors[req.id]) {
+						newErrors[req.id] = `กรุณาอัปโหลดไฟล์ ${req.name}`;
+					}
 				}
 			}
 		}
 
-		if (Object.keys(errors).length > 0) {
+		if (!year) {
+			newErrors.year = "กรุณากรอกปีการศึกษา";
+		}
+
+		if (!grade) {
+			newErrors.grade = "กรุณากรอกเกรดเฉลี่ย";
+		}
+
+		errors = newErrors;
+
+		if (Object.values(newErrors).some((e) => e)) {
+			alert("กรุณากรอกข้อมูลให้ครบถ้วน")
 			isSubmitting = false;
 			cancel();
 			return;
 		}
-		if (!year) {
-			errors = { ...errors, year: 'กรุณากรอกปีการศึกษา' };
-		}
 
-		if (!grade) {
-			errors = { ...errors, grade: 'กรุณากรอกเกรดเฉลี่ย' };
-		}
 		return async ({ update }) => {
 			await update();
 			isSubmitting = false;
@@ -125,6 +132,7 @@
 			name="year"
 			min="1"
 			max="12"
+			oninput={() => (errors = { ...errors, year: "" })}
 			bind:value={year}
 			placeholder="เช่น 1"
 			class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
@@ -147,6 +155,7 @@
 			step="0.01"
 			min="0"
 			max="4"
+			oninput={() => (errors = { ...errors, grade: "" })}
 			name="grade"
 			bind:value={grade}
 			placeholder="เช่น 3.58"
@@ -224,10 +233,10 @@
 			{/if}
 		</div>
 
-		{#if award}
+		{#if award && award.requirements && award.requirements.length > 0}
 			<div>
 				<h3 class="text-lg font-semibold mb-4">
-					เอกสารเพิ่มเติมสำหรับ {award.name}
+					เอกสารเพิ่มเติม
 				</h3>
 
 				{#each award.requirements as req (req.id)}
@@ -285,7 +294,7 @@
 		<button
 			type="submit"
 			disabled={isSubmitting}
-			class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:bg-emerald-300 disabled:cursor-not-allowed"
+			class="cursor-pointer px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:bg-emerald-300 disabled:cursor-not-allowed"
 		>
 			{isSubmitting ? "กำลังส่ง..." : "ส่งใบสมัคร"}
 		</button>

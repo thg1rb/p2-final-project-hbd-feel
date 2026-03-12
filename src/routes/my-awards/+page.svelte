@@ -140,7 +140,7 @@
                         {@const currentStatus = checkApprovedStatus(reg.status, reg.level, isClosed)}
 
                         <a href="/application-list/{reg.application_id}">
-                            <div class="... flex justify-between items-center ...">
+                            <div class="bg-white p-5 rounded-2xl mb-2 mx-2 shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow group cursor-pointer transition duration-300 hover:shadow-lg hover:shadow-emerald-500/50 ">
                                 <div class="flex items-center gap-5">
                                     <div class="{availableStatus[currentStatus]?.color} p-4 rounded-xl">
                                         <Icon name={availableStatus[currentStatus]?.icon} currentColor="white" size={28}/>
@@ -151,7 +151,7 @@
                                             <span class="text-sm font-normal text-gray-500">({reg.award_name})</span>
                                         </h4>
                                         <p class="text-gray-400 text-sm">
-                                            {reg.semester}/{reg.academic_year} • สมัครเมื่อ ...
+                                            {reg.semester}/{reg.academic_year} • สมัครเมื่อ {reg.created_at ? formatThaiDate(reg.created_at) : "XXXX" }
                                         </p>
                                     </div>
                                 </div>

@@ -224,7 +224,7 @@
 			{/if}
 		</div>
 
-		{#if award}
+		{#if award && award.requirements && award.requirements.length > 0}
 			<div>
 				<h3 class="text-lg font-semibold mb-4">
 					เอกสารเพิ่มเติมสำหรับ {award.name}
@@ -285,7 +285,7 @@
 		<button
 			type="submit"
 			disabled={isSubmitting}
-			class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:bg-emerald-300 disabled:cursor-not-allowed"
+			class="cursor-pointer px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:bg-emerald-300 disabled:cursor-not-allowed"
 		>
 			{isSubmitting ? "กำลังส่ง..." : "ส่งใบสมัคร"}
 		</button>

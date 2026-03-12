@@ -64,7 +64,7 @@
 			type="button"
 			on:click={submitForm}
 			disabled={loading}
-			class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg transition"
+			class="cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg transition"
 		>
 			{loading ? 'กำลังบันทึก...' : 'ถัดไป >'}
 		</button>

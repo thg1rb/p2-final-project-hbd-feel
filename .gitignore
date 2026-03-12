@@ -15,9 +15,12 @@ Thumbs.db
 # Env
 .env
 .env.*
+.secrets
 !.env.example
 !.env.test
 
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+actions-runner
+minikube-*

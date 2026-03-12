@@ -1,2 +1,23 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
+
+@source "../**/*.{ts,tsx}";
+
+@theme {
+  --color-primary: #02a96b;
+  --color-background: #f6f7f9
+  --color-text-secondary: oklch(70.7% 0.022 261.325)
+}
+
+@layer base {
+  /* src/routes/layout.css */
+  :root, body {
+    font-family: 'Noto Sans Thai', sans-serif;
+  }
+}
+
+@layer components {
+  .button-effect {
+    @apply cursor-pointer hover:scale-95 active:scale-90 transition-all
+  }
+}

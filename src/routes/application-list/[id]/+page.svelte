@@ -109,7 +109,7 @@
 					</div>
 					{/if}
 				{:else}
-				  {#if application.level >= currentLevel && application.status === ApprovalStatus.APPROVED}
+				  {#if (application.level === currentLevel && application.status === ApprovalStatus.APPROVED) || (application.level > currentLevel)}
 					<div
 						class="w-fit rounded-full border border-emerald-400 bg-emerald-50 px-3 py-1 text-sm text-emerald-400"
 					>

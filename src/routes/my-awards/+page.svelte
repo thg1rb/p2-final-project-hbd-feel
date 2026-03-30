@@ -14,7 +14,8 @@
         }
     };
 
-    const { regs, stats, curr, student, isClosed, alreadyApplied } = data;
+    const { regs, stats, curr, student, alreadyApplied } = data;
+    console.log(regs);
 
     let availableStatus : AvailableStatus = {
         APPROVED: {
@@ -37,7 +38,6 @@
         }
     };
 
-    // Update the function signature to include isClosed
     function checkApprovedStatus(status: string, level: number, isClosed: boolean): "APPROVED" | "SUBMITTED" | "REJECTED" {
         if (status === "REJECTED") return "REJECTED";
 
@@ -146,9 +146,9 @@
                         </div>
                     {:else}
                     {#each regs as reg}
-                        {@const currentStatus = checkApprovedStatus(reg.status, reg.level, isClosed)}
+                        {@const currentStatus = checkApprovedStatus(reg.status, reg.level, reg.event.status === "CLOSED")}
 
-                        <a href="/application-list/{reg.application_id}">
+                        <a href="/application-list/{reg.id}">
                             <div class="bg-white p-5 rounded-2xl mb-2 mx-2 shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow group cursor-pointer transition duration-300 hover:shadow-lg hover:shadow-emerald-500/50 ">
                                 <div class="flex items-center gap-5">
                                     <div class="{availableStatus[currentStatus]?.color} p-4 rounded-xl">
@@ -157,10 +157,10 @@
                                     <div>
                                         <h4 class="font-bold text-gray-800 text-lg">
                                             รางวัลนิสิตดีเด่น
-                                            <span class="text-sm font-normal text-gray-500">({reg.award_name})</span>
+                                            <span class="text-sm font-normal text-gray-500">({reg.award.name})</span>
                                         </h4>
                                         <p class="text-gray-400 text-sm">
-                                            {reg.semester}/{reg.academic_year} • สมัครเมื่อ {reg.created_at ? formatThaiDate(reg.created_at) : "XXXX" }
+                                            {reg.event.semester}/{reg.event.academic_year} • สมัครเมื่อ {reg.created_at ? formatThaiDate(reg.created_at) : "XXXX" }
                                         </p>
                                     </div>
                                 </div>

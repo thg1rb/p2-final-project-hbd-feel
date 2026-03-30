@@ -44,7 +44,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 				user,
 				application: undefined,
 				approvals: undefined,
-				isClosed: false,
 				isOwnApplication: false,
 				isEditable: false
 			};
@@ -53,19 +52,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 		const application = appResponse.data as Application;
 		const approvalResponse = await apiClient.get(`/approvals/${id}`);
 		const approvals = approvalResponse.data as Approval[];
-
-		let isClosed = false;
-
-		try {
-			const isClosedResponse = await apiClient.get(`/event/is-closed`, {
-				headers: {
-					Authorization: `Bearer ${token}`
-				}
-			});
-			isClosed = isClosedResponse.data as boolean;
-		} catch {
-			isClosed = false;
-		}
 
 		const isOwnApplication = application?.student_id === user.studentID;
 
@@ -81,7 +67,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 			user,
 			application,
 			approvals,
-			isClosed,
 			isOwnApplication,
 			isEditable
 		};
@@ -91,7 +76,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 			user,
 			application: undefined,
 			approvals: undefined,
-			isClosed: false,
 			isOwnApplication: false,
 			isEditable: false
 		};
@@ -138,32 +122,31 @@ export const actions: Actions = {
 	},
 
 	delete: async ({ params, cookies }) => {
-    const token = cookies.get('token');
-    const applicationId = params.id;
+		const token = cookies.get('token');
+		const applicationId = params.id;
 
-    try {
-      await apiClient.delete(`/application/${applicationId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+		try {
+			await apiClient.delete(`/application/${applicationId}`, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			});
+		} catch (error: any) {
+			console.error('Delete Action Error:', error);
 
-    } catch (error: any) {
-      console.error('Delete Action Error:', error);
+			if (error.response) {
+				return fail(error.response.status, {
+					success: false,
+					message: error.response.data?.message || 'ไม่สามารถลบใบสมัครได้'
+				});
+			}
 
-      if (error.response) {
-        return fail(error.response.status, {
-          success: false,
-          message: error.response.data?.message || 'ไม่สามารถลบใบสมัครได้'
-        });
-      }
+			return fail(500, {
+				success: false,
+				message: 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์'
+			});
+		}
 
-      return fail(500, {
-        success: false,
-        message: 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์'
-      });
-    }
-
-    throw redirect(303, '/my-awards');
-  }
+		throw redirect(303, '/my-awards');
+	}
 };

@@ -16,8 +16,8 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
 		}
 	});
 
-	const regs = response.data.data.applications;
-	const currentEvent = response.data.data.current_event;
+	const regs = response.data.applications;
+	const currentEvent = response.data.current_event;
 
 	let alreadyApplied = false;
 

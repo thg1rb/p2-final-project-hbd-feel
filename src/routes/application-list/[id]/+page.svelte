@@ -14,7 +14,7 @@
 
   const application = $derived(data.application);
   const approvals = $derived(data.approvals);
-  const isClosed = $derived(data.isClosed);
+  const isClosed = $derived(application!.event.status === "CLOSED");
 
   const { currentLevel, previousLevel } = $derived.by(() => {
     let currentLevel = RoleLevel['ASSO_DEAN'];
@@ -30,9 +30,6 @@
         break;
       case UserRole.BOARD:
         currentLevel = RoleLevel['BOARD'];
-        break;
-      case UserRole.BOARD_HEAD:
-        currentLevel = RoleLevel['BOARD_HEAD'];
         break;
       case UserRole.NISIT:
         currentLevel = RoleLevel['NISIT'];

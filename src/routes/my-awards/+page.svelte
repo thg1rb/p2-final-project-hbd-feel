@@ -84,8 +84,8 @@
 
         <div class="w-2/3 flex flex-wrap gap-8 justify-evenly">
             <CountBox title="การสมัครทั้งหมด" amount={stats?.all} iconPrimary="#059669" iconSecondary="#ecfdf5" icon="book"/>
-            <CountBox title="รอพิจารณา" amount={stats?.pending} iconPrimary="#f97316" iconSecondary="#fff7ed" icon="eye"/>
-            <CountBox title="อนุมัติแล้ว" amount={stats?.approved} textColor="#226e64" iconPrimary="#22c55e" iconSecondary="#f0fdf4" icon="trophy"/>
+            <CountBox title="กำลังดำเนินการ" amount={stats?.pending} iconPrimary="#f97316" iconSecondary="#fff7ed" icon="eye"/>
+            <CountBox title="เสร็จสมบูรณ์" amount={stats?.approved} textColor="#226e64" iconPrimary="#22c55e" iconSecondary="#f0fdf4" icon="trophy"/>
             <CountBox title="ไม่ผ่านการพิจารณา" amount={stats?.rejected} textColor="red" iconPrimary="#ef4444" iconSecondary="#fef2f2" icon="trash-2"/>
         </div>
 

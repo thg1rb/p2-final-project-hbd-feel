@@ -19,6 +19,12 @@
 
   const categories = $derived(awards.categories ?? []);
   const pdfPath = $derived(awards.pdf_path ?? null);
+
+  const downloadUrl = $derived(
+    pdfPath 
+      ? `/api/get-image?path=${encodeURIComponent(pdfPath)}` 
+      : '#'
+  );
 </script>
 <div class="bg-[#f3f4f6] min-h-screen">
 
@@ -98,24 +104,25 @@
 
           {#if pdfPath}
           <a
-            href={`${PUBLIC_BROWSER_API_BASE_URL}/minio/download-pdf?path=${encodeURIComponent(pdfPath)}`}
-            class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm transition font-medium"
-            download
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M12 3v12m0 0l4-4m-4 4l-4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
-            </svg>
+      href={downloadUrl}
+      target="_blank"
+      class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm transition font-medium"
+      download="รายชื่อนิสิตได้รับรางวัล.pdf"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 3v12m0 0l4-4m-4 4l-4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+      </svg>
 
-            ดาวน์โหลดรายชื่อ
-          </a>
+      ดาวน์โหลดรายชื่อ
+    </a>
           {/if}
 
         </div>

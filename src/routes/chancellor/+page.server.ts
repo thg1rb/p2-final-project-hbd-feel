@@ -38,7 +38,6 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
     throw redirect(303, '/');
   }
 
-  console.log("TOKEN: ", token)
 
 
   try {
@@ -126,7 +125,6 @@ export const actions: Actions = {
 
       return { success: true }
     } catch (err: any) {
-      console.log(err)
       return fail(500, { error: 'ไม่สามารถติดต่อ Server ได้' })
     }
   }

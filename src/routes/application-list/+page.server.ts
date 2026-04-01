@@ -37,7 +37,6 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
     throw redirect(303, '/');
   }
 
-  console.log("TOKEN: ", token)
 
 
   try {

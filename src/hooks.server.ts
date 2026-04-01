@@ -55,6 +55,9 @@ function getDefaultPath(role: string | null): string {
 
 // Check permission
 function hasPermission(path: string, role: string | null): boolean {
+
+	if (path.startsWith('/api/')) return true;
+
 	// Public
 	if (PUBLIC_ROUTES.some((r) => matchRoute(path, r))) {
 		return true;

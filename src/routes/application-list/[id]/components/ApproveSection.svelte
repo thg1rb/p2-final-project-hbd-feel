@@ -12,7 +12,6 @@
 
 	const handleSubmit: SubmitFunction = ({ formData, cancel }) => {
 		const status = formData.get('status') || 'ดำเนินการ';
-		console.log(status);
 		const message =
 			status === 'approved'
 				? 'ยืนยันการ "เห็นชอบ" ใช่หรือไม่? \n(หากเห็นชอบไปแล้วจะไม่สามารถย้อนกลับได้อีก)'
@@ -36,7 +35,6 @@
 				} else {
 					toastStack.add('เกิดข้อผิดพลาด', 'error');
 				}
-				console.log('ข้อมูลจากเซิร์ฟเวอร์:', result.data);
 			}
 		};
 	};

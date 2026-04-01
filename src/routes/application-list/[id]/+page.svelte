@@ -94,11 +94,11 @@
 						<div
 							class="w-fit rounded-full border border-emerald-400 bg-emerald-50 px-3 py-1 text-sm text-emerald-400"
 						>
-							อนุมัติ
+							เสร็จสมบูรณ์
 						</div>
 					{:else if application.status === ApprovalStatus.REJECTED}
 				  <div class=" rounded-full border border-red-400 bg-red-100 px-3 py-1 text-red-400">
-         			  ปฏิเสธ
+         			  ไม่ผ่านการพิจารณา
        			  </div>
 					{:else}
 					<div class=" rounded-full border border-orange-400 bg-orange-100 px-3 py-1 text-orange-400">

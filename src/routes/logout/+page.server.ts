@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { apiClient } from '$lib/api';
+import { apiClient, withAuth } from '$lib/api';
 
 export const actions: Actions = {
     default: async ({ cookies }) => {
@@ -8,7 +8,7 @@ export const actions: Actions = {
 
         if (token) {
             try {
-                await apiClient.delete('/revoke');
+                await apiClient.delete('/revoke', withAuth(token));
             } catch (err) {
                 console.error('Logout API failed, but continuing to clear cookie...');
             }

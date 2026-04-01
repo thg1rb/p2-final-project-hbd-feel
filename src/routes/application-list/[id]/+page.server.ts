@@ -1,4 +1,4 @@
-import { apiClient } from '$lib/api.js';
+import { apiClient, withAuth } from '$lib/api.js';
 import { roleMapUserRole, UserRole } from '$lib/enums.js';
 import { toastStack } from '$lib/stores/toast.svelte.js';
 import type { Application, Approval, UserFromToken } from '$lib/type.js';
@@ -18,6 +18,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
 	try {
 		const userToken = cookies.get('user_info');
+		const token = cookies.get('token');
 
 		if (userToken) {
 			try {
@@ -37,11 +38,12 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 			throw redirect(303, '/');
 		}
 
-		const appResponse = await apiClient.get(`/application/${id}`);
+		const appResponse = await apiClient.get(`/application/${id}`, withAuth(token));
 
 		if (!appResponse.data) {
 			return {
 				user,
+				token,
 				application: undefined,
 				approvals: undefined,
 				isOwnApplication: false,
@@ -50,7 +52,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 		}
 
 		const application = appResponse.data as Application;
-		const approvalResponse = await apiClient.get(`/approvals/${id}`);
+		const approvalResponse = await apiClient.get(`/approvals/${id}`, withAuth(token));
 		const approvals = approvalResponse.data as Approval[];
 
 		const isOwnApplication = application?.student_id === user.studentID;
@@ -65,6 +67,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
 		return {
 			user,
+			token,
 			application,
 			approvals,
 			isOwnApplication,
@@ -93,6 +96,7 @@ export const actions: Actions = {
 
 		// Get current user ID from cookie
 		const userToken = cookies.get('user_info');
+		const token = cookies.get('token')
 		let userId = 0;
 		if (userToken) {
 			try {
@@ -110,7 +114,7 @@ export const actions: Actions = {
 				application_id: applicationId,
 				reason: reason,
 				status: status
-			});
+			}, withAuth(token));
 
 			return { success: true, data: response.data };
 		} catch (error: any) {

@@ -127,8 +127,8 @@
 					<tr class="">
 						<td class=" p-4 text-sm">{app.user.firstName} {app.user.lastName}</td>
 						<td class=" p-4 text-sm">{app.user.student_id}</td>
-						<td class=" p-4">{app.user.department.name}</td>
-						<td class=" p-4">{app.award.name}</td>
+						<td class=" p-4">{app.user?.department?.name ?? 'ไม่ระบุภาควิชา'}</td>
+						<td class=" p-4">{app.award?.name ?? 'ไม่ระบุประเภทรางวัล'}</td>
 						<td class=" p-4">
 							{#if app.level === currentLevel && app.status === 'REJECTED'}
 								<div

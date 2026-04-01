@@ -1,4 +1,4 @@
-import { apiClient } from "$lib/api";
+import { apiClient, withAuth } from "$lib/api";
 import type { Application, User, UserFromToken } from "$lib/type";
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from './$types';
@@ -96,7 +96,7 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
 }
 
 export const actions: Actions = {
-  upload: async ({ request }) => {
+  upload: async ({ request, cookies }) => {
     const formData = await request.formData()
     const file = formData.get('document') as File
     const eventId = formData.get('event-id')
@@ -114,14 +114,15 @@ export const actions: Actions = {
     apiFormData.append('folder', 'event')
 
     try {
-      const res = await apiClient.post('/minio/upload', apiFormData)
+      const token = cookies.get('token');
+      const res = await apiClient.post('/minio/upload', apiFormData, withAuth(token))
       const result = await res.data
       const path = result.path
 
       const resEvent = await apiClient.post('/event/end-event', {
         eventId: eventId,
         path: path
-      })
+      }, withAuth(token))
 
       return { success: true }
     } catch (err: any) {

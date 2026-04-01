@@ -1,4 +1,4 @@
-import { apiClient } from '$lib/api';
+import { apiClient, withAuth } from '$lib/api';
 import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
 		console.log(locals.user);
 		const id = locals.user.student_id;
 		console.log(id);
-		const response = await apiClient.get(`/application/student/${id}`);
+		const response = await apiClient.get(`/application/student/${id}`, withAuth(token));
 
 		// console.log('loading data');
 		// console.log(response.data);

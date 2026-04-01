@@ -31,7 +31,6 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	const applications = $derived.by(() => {
-		console.log('IN FRONTEND: ', data.applications.length);
 		return data.applications;
 	});
 	const stats = $derived(data.stats);
@@ -88,7 +87,6 @@
 
 		const allApplications: Application[] = await response.json();
 
-		console.log(allApplications);
 
 		await downloadTableAsPDF(allApplications, headers, 'student_report.pdf', data.user.name);
 

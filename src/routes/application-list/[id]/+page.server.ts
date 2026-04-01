@@ -19,6 +19,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 	try {
 		const userToken = cookies.get('user_info');
 		const token = cookies.get('token');
+		console.log(token)
 
 		if (userToken) {
 			try {

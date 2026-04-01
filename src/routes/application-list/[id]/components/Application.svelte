@@ -14,20 +14,30 @@
 	onMount(() => {
 		const loadFile = async () => {
 			try {
-				const fileResponse = await apiClient.get(`/minio/download`, {
-					params: { path: application.path },
-					responseType: 'blob'
+				const res = await fetch(`/api/get-image?path=${encodeURIComponent(application.path)}`, {
+					headers: { Accept: 'application/pdf' }
 				});
-				previewUrl = URL.createObjectURL(fileResponse.data);
+
+				if (!res.ok) {
+					throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
+				}
+
+				const blob = await res.blob();
+
+				previewUrl = URL.createObjectURL(blob);
 			} catch (e) {
-				console.error('Failed to load PDF', e);
+				console.error('Failed to load PDF via Proxy API', e);
 			}
 		};
 
-		loadFile();
+		if (application.path) {
+			loadFile();
+		}
 
 		return () => {
-			if (previewUrl) URL.revokeObjectURL(previewUrl);
+			if (previewUrl) {
+				URL.revokeObjectURL(previewUrl);
+			}
 		};
 	});
 </script>

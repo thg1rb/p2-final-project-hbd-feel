@@ -4,7 +4,6 @@ import { fail, redirect } from '@sveltejs/kit';
 
 export const actions: Actions = {
 	login: async ({ cookies, request }) => {
-		console.log('Try to login');
 		const data = await request.formData();
 		const credential = data.get('credential');
 		const password = data.get('password');
@@ -13,12 +12,10 @@ export const actions: Actions = {
 				credential: credential,
 				password: password
 			});
-			console.log('RESPONSE: ', response.data.user);
 
 			const token = response.data.token;
 			const user = response.data.user;
 			const force_password_change = response.data.user.force_password_change;
-			console.log(`force? : ${force_password_change}`);
 
 			cookies.set('token', token, {
 				path: '/',
@@ -28,7 +25,6 @@ export const actions: Actions = {
 				maxAge: 60 * 60 * 24 * 7 // 7 days
 			});
 
-			console.log('TOKEN: ', token);
 
 			const userBase64 = Buffer.from(JSON.stringify(user)).toString('base64');
 			cookies.set('user_info', userBase64, { path: '/', maxAge: 60 * 60 * 24 * 7 });
@@ -47,7 +43,6 @@ export const actions: Actions = {
 				throw redirect(303, '/application-list');
 			}
 		} catch (err: any) {
-			console.log(err);
 			if (err?.status === 303) throw err;
 			if (err?.response?.status === 401) {
 				return fail(401, {

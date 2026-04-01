@@ -25,7 +25,6 @@ export const actions: Actions = {
                 }
             );
 
-            console.log(response.data);
 
             const updatedUser = response.data.user;
             const userBase64 = Buffer.from(JSON.stringify(updatedUser)).toString('base64');
@@ -38,7 +37,6 @@ export const actions: Actions = {
                     errors: err.response.data.errors
                 });
             }
-            console.log(err)
         }
 
     }

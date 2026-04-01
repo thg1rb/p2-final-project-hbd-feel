@@ -65,8 +65,8 @@
 
 <div class="h-screen bg-[#f3f4f6]">
 	<div class="flex flex-col items-center justify-center gap-7 p-8">
-		<div class="flex w-2/3 flex-col gap-2">
-			<div class="flex justify-between">
+		<div class="flex w-full flex-col gap-2">
+			<div class="flex flex-col justify-between gap-4 md:flex-row">
 				<p class="text-3xl font-bold">สวัสดี, {student?.firstName} {student?.lastName}</p>
 				{#if curr && new Date(curr.end_date) > new Date() && new Date(curr.start_date) < new Date()}
 					<div on:click={applyAward} class="cursor-pointer">
@@ -90,7 +90,7 @@
 			</p>
 		</div>
 
-		<div class="flex w-2/3 flex-wrap justify-evenly gap-8">
+		<div class="flex flex-wrap justify-evenly gap-8">
 			<CountBox
 				title="การสมัครทั้งหมด"
 				amount={stats?.all}
@@ -124,11 +124,11 @@
 		</div>
 
 		{#if curr}
-			<div class="w-2/3">
+			<div class="w-full">
 				<div
-					class="flex items-center justify-between rounded-2xl bg-[#2d6a4f] p-6 text-white shadow-md"
+					class="flex flex-col items-center justify-between gap-3 rounded-2xl bg-[#2d6a4f] p-6 text-white shadow-md md:flex-row"
 				>
-					<div class="flex items-center gap-5">
+					<div class="flex flex-col items-center gap-5 md:flex-row">
 						<div class="rounded-xl bg-white/20 p-4">
 							<Icon name="calendar" size={35} currentColor="white" />
 						</div>
@@ -139,7 +139,7 @@
 							</p>
 						</div>
 					</div>
-					<div class="text-right">
+					<div class="text-center md:text-right">
 						{#if new Date(curr.end_date) > new Date() && new Date(curr.start_date) < new Date()}
 							<span class="rounded-full bg-[#f39c12] px-4 py-1 text-sm font-bold text-white"
 								>เปิดรับสมัคร</span
@@ -167,7 +167,7 @@
 			</div>
 		{/if}
 
-		<div class="w-2/3">
+		<div class="w-full">
 			<div class="space-y-4">
 				<div class="flex items-center gap-2">
 					<Icon name="home" size={28} currentColor="green" />

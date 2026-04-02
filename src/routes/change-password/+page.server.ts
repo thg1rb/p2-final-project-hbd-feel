@@ -4,7 +4,6 @@ import { fail, redirect } from '@sveltejs/kit';
 
 export const actions: Actions = {
     change_password: async ({ cookies, request, locals }) => {
-        console.log("Try to login");
         const data = await request.formData();
         const password = data.get('password');
         const confirm = data.get('password_confirmation');
@@ -53,7 +52,6 @@ export const actions: Actions = {
                 throw redirect(303, '/application-list')
             }
         } catch (err : any) {
-            console.log(err);
             if (err?.status === 303) throw err;
             if (err.status === 401) {
                 return fail(401, "Invalid Credential")

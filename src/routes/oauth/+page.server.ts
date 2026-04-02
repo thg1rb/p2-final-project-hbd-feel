@@ -33,7 +33,6 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
 			throw redirect(303, '/change-password#forced');
 		}
 
-		console.log('Redirect!');
 		throw redirect(303, '/');
 	} catch (err) {
 		console.error(err);

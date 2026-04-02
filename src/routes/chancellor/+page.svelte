@@ -31,7 +31,6 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	const applications = $derived.by(() => {
-		console.log('IN FRONTEND: ', data.applications.length);
 		return data.applications;
 	});
 	const stats = $derived(data.stats);
@@ -88,7 +87,6 @@
 
 		const allApplications: Application[] = await response.json();
 
-		console.log(allApplications);
 
 		await downloadTableAsPDF(allApplications, headers, 'student_report.pdf', data.user.name);
 
@@ -232,9 +230,9 @@
 				</div>
 			{/if}
 
-			<ApplicationStat stats={data.stats} />
+			<!-- <ApplicationStat stats={data.stats} /> -->
 
-			<RequestTable
+			<!-- <RequestTable
 				needFilter={true}
 				user={data.user}
 				applications={data.applications}
@@ -244,7 +242,7 @@
 				statusFilter={data.status || ''}
 				currentPage={data.currentPage || 1}
 				totalPages={data.totalPages || 1}
-			/>
+			/> -->
 		</div>
 	{:else}
 		<div class="flex flex-col items-center gap-8 rounded-xl bg-white p-15 shadow-md">

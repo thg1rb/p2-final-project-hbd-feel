@@ -15,16 +15,19 @@
 		previewUrls = new Array(application.award.requirements.length).fill(null);
 
 		const loadFiles = async () => {
+			previewUrls = new Array(application.award.requirements.length).fill(null);
+
 			const tasks = application.award.requirements.map(async (req, i) => {
 				try {
 					const targetPath: string = application.documents[req.id].file_path;
 
-					const res = await apiClient.get(`/minio/download`, {
-						params: { path: targetPath },
-						responseType: 'blob'
-					});
+					const res = await fetch(`/api/get-image?path=${encodeURIComponent(targetPath)}`);
 
-					previewUrls[i] = URL.createObjectURL(res.data);
+					if (!res.ok) throw new Error('Fetch failed');
+
+					const blob = await res.blob();
+
+					previewUrls[i] = URL.createObjectURL(blob);
 				} catch (e) {
 					console.error(`Failed to load PDF at index ${i}`, e);
 				}

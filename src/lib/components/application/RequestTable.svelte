@@ -33,8 +33,6 @@
 		totalPages = 1
 	}: Props = $props();
 
-	console.log('IN COMPONENT', applications.length);
-
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 
@@ -82,7 +80,7 @@
 
 <div class="flex w-full flex-col gap-y-6 rounded-xl bg-white p-5 shadow-sm">
 	<form onsubmit={handleSubmit} class="flex w-full flex-col gap-2.5 md:flex-row">
-		<div class="flex flex-1 flex-row items-stretch gap-x-2.5">
+		<div class="flex flex-1 flex-col items-stretch gap-3 gap-x-2.5 md:flex-row">
 			<input
 				name="search"
 				value={searchQuery}
@@ -127,8 +125,8 @@
 					<tr class="">
 						<td class=" p-4 text-sm">{app.user.firstName} {app.user.lastName}</td>
 						<td class=" p-4 text-sm">{app.user.student_id}</td>
-						<td class=" p-4">{app.user.department.name}</td>
-						<td class=" p-4">{app.award.name}</td>
+						<td class=" p-4">{app.user?.department?.name ?? 'ไม่ระบุภาควิชา'}</td>
+						<td class=" p-4">{app.award?.name ?? 'ไม่ระบุประเภทรางวัล'}</td>
 						<td class=" p-4">
 							{#if app.level === currentLevel && app.status === 'REJECTED'}
 								<div

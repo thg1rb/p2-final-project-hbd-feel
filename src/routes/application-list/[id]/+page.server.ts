@@ -1,4 +1,4 @@
-import { apiClient } from '$lib/api.js';
+import { apiClient, withAuth } from '$lib/api.js';
 import { roleMapUserRole, UserRole } from '$lib/enums.js';
 import { toastStack } from '$lib/stores/toast.svelte.js';
 import type { Application, Approval, UserFromToken } from '$lib/type.js';
@@ -18,6 +18,8 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
 	try {
 		const userToken = cookies.get('user_info');
+		const token = cookies.get('token');
+		console.log(token)
 
 		if (userToken) {
 			try {
@@ -37,35 +39,22 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 			throw redirect(303, '/');
 		}
 
-		const appResponse = await apiClient.get(`/application/${id}`);
+		const appResponse = await apiClient.get(`/application/${id}`, withAuth(token));
 
 		if (!appResponse.data) {
 			return {
 				user,
+				token,
 				application: undefined,
 				approvals: undefined,
-				isClosed: false,
 				isOwnApplication: false,
 				isEditable: false
 			};
 		}
 
 		const application = appResponse.data as Application;
-		const approvalResponse = await apiClient.get(`/approvals/${id}`);
+		const approvalResponse = await apiClient.get(`/approvals/${id}`, withAuth(token));
 		const approvals = approvalResponse.data as Approval[];
-
-		let isClosed = false;
-
-		try {
-			const isClosedResponse = await apiClient.get(`/event/is-closed`, {
-				headers: {
-					Authorization: `Bearer ${token}`
-				}
-			});
-			isClosed = isClosedResponse.data as boolean;
-		} catch {
-			isClosed = false;
-		}
 
 		const isOwnApplication = application?.student_id === user.studentID;
 
@@ -79,9 +68,9 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
 		return {
 			user,
+			token,
 			application,
 			approvals,
-			isClosed,
 			isOwnApplication,
 			isEditable
 		};
@@ -91,7 +80,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 			user,
 			application: undefined,
 			approvals: undefined,
-			isClosed: false,
 			isOwnApplication: false,
 			isEditable: false
 		};
@@ -109,6 +97,7 @@ export const actions: Actions = {
 
 		// Get current user ID from cookie
 		const userToken = cookies.get('user_info');
+		const token = cookies.get('token')
 		let userId = 0;
 		if (userToken) {
 			try {
@@ -126,7 +115,7 @@ export const actions: Actions = {
 				application_id: applicationId,
 				reason: reason,
 				status: status
-			});
+			}, withAuth(token));
 
 			return { success: true, data: response.data };
 		} catch (error: any) {
@@ -138,32 +127,31 @@ export const actions: Actions = {
 	},
 
 	delete: async ({ params, cookies }) => {
-    const token = cookies.get('token');
-    const applicationId = params.id;
+		const token = cookies.get('token');
+		const applicationId = params.id;
 
-    try {
-      await apiClient.delete(`/application/${applicationId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+		try {
+			await apiClient.delete(`/application/${applicationId}`, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			});
+		} catch (error: any) {
+			console.error('Delete Action Error:', error);
 
-    } catch (error: any) {
-      console.error('Delete Action Error:', error);
+			if (error.response) {
+				return fail(error.response.status, {
+					success: false,
+					message: error.response.data?.message || 'ไม่สามารถลบใบสมัครได้'
+				});
+			}
 
-      if (error.response) {
-        return fail(error.response.status, {
-          success: false,
-          message: error.response.data?.message || 'ไม่สามารถลบใบสมัครได้'
-        });
-      }
+			return fail(500, {
+				success: false,
+				message: 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์'
+			});
+		}
 
-      return fail(500, {
-        success: false,
-        message: 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์'
-      });
-    }
-
-    throw redirect(303, '/my-awards');
-  }
+		throw redirect(303, '/my-awards');
+	}
 };

@@ -16,15 +16,16 @@ for academic leaders (Dept Heads, Deans) to review them.
 
 * **Framework:** Svelte / SvelteKit
 * **API:** Connected to the KU Award Laravel Server
-* **Authentication:** Shared JWT/Session via Backend (Supports Password & Google OAuth)
+* **Authentication:** Supports traditional credentials & Google OAuth
 
 ## 🌟 Key Features
 
-* **Student Dashboard:** * Submit one request per award type per event.
+* **Student Dashboard:** Submit one application per event.
     * View submission history.
-    * **Visual Timeline:** Track the real-time status of applications through various approval stages.
-* **Reviewer Interface:** * **Department Heads:** View/Handle requests from their specific department.
-    * **Deans & Associate Deans:** View/Handle requests for their entire faculty.
+    * **Visual Timeline:** Track the status of applications through various approval stages.
+* **Reviewer Interface:**
+    * **Department Heads:** View/Handle applications from their specific department.
+    * **Deans & Associate Deans:** View/Handle applications for their entire faculty.
     * **Boards:** Final review interface.
 * **Campus Separation:** Frontend logic respects campus-based data isolation.
 * **Results Page:** A public-facing announcement page for scholarship results.
@@ -34,7 +35,7 @@ for academic leaders (Dept Heads, Deans) to review them.
 * **Profile Editing:** Update personal info and change passwords.
 * **Security Gate:** Access to services is blocked until the "Force Password Change" requirement is met.
 
-## Get Started
+## 🚀 Get Started
 
 Copy the `.env` file
 

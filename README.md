@@ -1,44 +1,49 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/yIQ32uio)
+# 🏆 KU Award - Client & Evaluator Portal
 
-# sv
+A fast, reactive frontend built with Svelte. This is the primary interface for students to apply for scholarships and
+for academic leaders (Dept Heads, Deans) to review them.
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## 👤 Team Members (HBD Feel)
 
-## Creating a project
+| Student ID | Full Name (Nickname)                 |                  GitHub Username                  |
+|:----------:|--------------------------------------|:-------------------------------------------------:|
+| 6610401934 | Kerdsiri Srijaroen (Tonnam)          | [Tonwantpillow](https://github.com/Tonwantpillow) |
+| 6610402132 | Bowornrat Tangnararatchakit (Bright) |        [thg1rb](https://github.com/thg1rb)        |
+| 6610402205 | Rugsit Rungrattanachai (Nest)        |        [Rugsit](https://github.com/Rugsit)        |
+| 6610405905 | Narakorn Thanapornpakdee (Nam)       |          [nk-n](https://github.com/nk-n)          |
 
-If you're seeing this, you've probably already done this step. Congrats!
+## 🛠 Tech Stack
 
-```sh
-# create a new project
-npx sv create my-app
+* **Framework:** Svelte / SvelteKit
+* **API:** Connected to the KU Award Laravel Server
+* **Authentication:** Shared JWT/Session via Backend (Supports Password & Google OAuth)
+
+## 🌟 Key Features
+
+* **Student Dashboard:** * Submit one request per award type per event.
+    * View submission history.
+    * **Visual Timeline:** Track the real-time status of applications through various approval stages.
+* **Reviewer Interface:** * **Department Heads:** View/Handle requests from their specific department.
+    * **Deans & Associate Deans:** View/Handle requests for their entire faculty.
+    * **Boards:** Final review interface.
+* **Campus Separation:** Frontend logic respects campus-based data isolation.
+* **Results Page:** A public-facing announcement page for scholarship results.
+
+## 🔐 Account Management
+
+* **Profile Editing:** Update personal info and change passwords.
+* **Security Gate:** Access to services is blocked until the "Force Password Change" requirement is met.
+
+## Get Started
+
+Copy the `.env` file
+
+```shell
+cp .env.example .env
 ```
 
-To recreate this project with the same configuration:
+Run the container
 
-```sh
-# recreate this project
-npx sv create --template minimal --types ts --add prettier eslint tailwindcss="plugins:forms" devtools-json --install yarn p2-final-project-backend-hbd-feel
+```shell
+docker compose up -d
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

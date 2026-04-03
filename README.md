@@ -60,3 +60,13 @@ Run the container
 ```shell
 docker compose up -d
 ```
+
+## 🎓 Student Activity Management System
+
+| Role | Full Name | Username | Email | Password |
+| :--- | :--- | :--- | :--- | :--- |
+| **นิสิต (NISIT)** | นรากร ธนภรภักดี | `narakorn` | `narakorn.th@ku.th` | `password` |
+| **หัวหน้าภาค (DEPT_HEAD)** | สมชาย สายวิชาการ | `dept_head_01` | `dept.head@example.com` | `password` |
+| **รองคณบดี (ASSO_DEAN)** | จิราพร รักษ์การศึกษา | `asso_dean_01` | `asso.dean@example.com` | `password` |
+| **คณบดี (DEAN)** | วิชา ปัญญาเลิศ | `dean_01` | `dean@example.com` | `password` |
+| **คณะกรรมการ (BOARD)** | อำนาจ ตัดสินใจ | `board_01` | `board@example.com` | `password` |
